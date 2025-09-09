@@ -1,0 +1,23 @@
+
+# Feature: Interactive Workflow Visualizer
+
+## 1. Objective
+To provide users with a clear, graphical representation of the AI's decision-making and response process for each turn, enhancing transparency and understanding.
+
+## 2. Core Functionality
+
+### 2.1. Visualization Trigger
+- An icon or button will be added to each user message bubble (or the space after it).
+- Clicking this button will open a modal or an inline-expanding panel that displays the workflow for the response to that specific prompt.
+
+### 2.2. Flowchart/Timeline Display
+- The visualizer will render a simple flowchart or timeline.
+- **Nodes in the flowchart could include:**
+  - "User Prompt" (showing the text)
+  - "Manager Decision" (showing which agent was selected and why, if applicable)
+  - "Agent Response" (one node for each agent that responded in the turn)
+- Lines will connect the nodes to show the sequence of events.
+
+### 2.3. Data Integration
+- The visualizer will use the `pipeline` data already attached to AI message objects.
+- It will parse this data to construct the nodes and connections, displaying the inputs and outputs for each step in a readable format.

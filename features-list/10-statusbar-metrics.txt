@@ -1,0 +1,19 @@
+# Feature: Status Bar Metrics
+
+## 1. Objective
+To provide users with an at-a-glance overview of key statistics related to the current conversation and overall API usage.
+
+## 2. Core Functionality
+
+### 2.1. UI Placement
+- A persistent status bar shall be added to the bottom of the application window.
+
+### 2.2. Displayed Metrics
+
+#### Conversation-Specific Metrics:
+- **Current Messages Count:** A live count of the total number of messages in the currently active conversation.
+- **Current Total Message Tokens:** A live sum of the estimated tokens for all messages in the current conversation.
+
+#### Global Usage Metrics:
+- **Total Tokens Usage:** The cumulative token usage across all conversations and all models since the user started using the app. This data would need to be tracked and persisted.
+- **Today's Tokens Usage:** The total token usage for the current day, resetting at midnight (12:00 AM) in the user's local timezone.

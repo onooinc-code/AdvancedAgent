@@ -1,0 +1,18 @@
+# Feature: Conversation Titling and Identification
+
+## 1. Objective
+To allow users to easily identify conversations through clear, editable titles, with an AI-assisted option for convenience.
+
+## 2. Core Functionality
+
+### 2.1. Manual Renaming
+- The title of the currently active conversation shall be displayed in the main header area.
+- The title should be an editable field (e.g., click-to-edit).
+- After editing, the new title must be saved to the database and updated in the conversation list side panel.
+
+### 2.2. AI-Powered Renaming
+- An icon or button (e.g., "sparkle" icon) shall be placed next to the conversation title.
+- When clicked, this action triggers a call to a dedicated AI model.
+- The model will receive the current message history as context.
+- The AI's task is to generate a concise and relevant title (e.g., "Brainstorming Sci-Fi Story Ideas") for the conversation.
+- The generated title automatically replaces the current title, but the user can still edit it manually afterward.

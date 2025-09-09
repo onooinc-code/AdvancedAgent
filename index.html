@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced AI Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/13.0.2/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+      :root {
+        --font-sans: 'Inter', sans-serif;
+        --font-mono: 'Roboto Mono', monospace;
+        --color-bg: #0a0a0f;
+        --color-pane: rgba(23, 26, 43, 0.5);
+        --color-border: rgba(129, 140, 248, 0.2);
+        --color-primary-header: #1e293b; /* slate-800 */
+        --color-user-bubble: #1a73e8;
+        --color-neon-indigo: rgba(129, 140, 248, 1);
+        --color-neon-cyan: rgba(34, 211, 238, 1);
+      }
+
+      body {
+        font-family: var(--font-sans);
+      }
+      
+      /* Animations */
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .animate-fade-in-up {
+        animation: fadeInUp 0.5s ease-out forwards;
+      }
+      
+      @keyframes blink {
+        50% { opacity: 0; }
+      }
+      .streaming-cursor {
+        display: inline-block;
+        width: 8px;
+        height: 1.2em;
+        background-color: var(--color-neon-cyan);
+        animation: blink 1s step-end infinite;
+        vertical-align: text-bottom;
+        margin-left: 2px;
+      }
+
+      /* Modal Styles */
+      .modal-overlay {
+        opacity: 0;
+        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+      .modal-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .modal-content {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .modal-overlay.open .modal-content {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      /* Glassmorphism & Neon Effects */
+      .glass-pane {
+        background-color: var(--color-pane);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border: 1px solid var(--color-border);
+      }
+
+      .neon-glow-indigo {
+         box-shadow: 0 0 3px rgba(129, 140, 248, 0.5), 0 0 6px rgba(129, 140, 248, 0.3);
+      }
+      .neon-glow-cyan {
+         box-shadow: 0 0 3px rgba(34, 211, 238, 0.5), 0 0 6px rgba(34, 211, 238, 0.3);
+      }
+
+      .hover-glow-indigo:hover {
+        box-shadow: 0 0 8px rgba(129, 140, 248, 0.7), 0 0 15px rgba(129, 140, 248, 0.5);
+      }
+      
+      .neon-focus-ring:focus-within {
+        box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-neon-cyan);
+      }
+      
+      /* Subtle background texture for message contents */
+      .content-bg-agent {
+          background-color: #f8fafc; /* gray-50 */
+          background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23e2e8f0' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+      }
+      .content-bg-user {
+          background-color: var(--color-user-bubble);
+           background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+      }
+
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(129, 140, 248, 0.4);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(129, 140, 248, 0.6);
+      }
+      
+      /* AGENT MESSAGE PROSE OVERRIDE */
+      .prose-agent {
+        --tw-prose-body: #1e293b; /* slate-800 */
+        --tw-prose-headings: #0f172a; /* slate-900 */
+        --tw-prose-lead: #334155;
+        --tw-prose-links: #4f46e5; /* indigo-600 */
+        --tw-prose-bold: #0f172a;
+        --tw-prose-counters: #4f46e5;
+        --tw-prose-bullets: #4f46e5;
+        --tw-prose-hr: rgba(129, 140, 248, 0.2);
+        --tw-prose-quotes: #334155;
+        --tw-prose-quote-borders: #6366f1; /* indigo-500 */
+        --tw-prose-captions: #475569;
+        --tw-prose-code: #4338ca; /* indigo-700 */
+        --tw-prose-pre-code: #e5e7eb; /* gray-200 */
+        --tw-prose-pre-bg: rgba(17, 24, 39, 0.9);
+      }
+      
+      /* USER MESSAGE PROSE OVERRIDE (INVERTED) */
+      .prose-user {
+        --tw-prose-body: #d1d5db; /* gray-300 */
+        --tw-prose-headings: #ffffff;
+        --tw-prose-lead: #a5b4fc; /* indigo-300 */
+        --tw-prose-links: #c7d2fe; /* indigo-200 */
+        --tw-prose-bold: #ffffff;
+        --tw-prose-counters: #a5b4fc;
+        --tw-prose-bullets: #a5b4fc;
+        --tw-prose-hr: rgba(255, 255, 255, 0.2);
+        --tw-prose-quotes: #e5e7eb;
+        --tw-prose-quote-borders: #a5b4fc;
+        --tw-prose-captions: #9ca3af;
+        --tw-prose-code: #c7d2fe;
+        --tw-prose-pre-code: #c7d2fe;
+        --tw-prose-pre-bg: rgba(0, 0, 0, 0.3);
+      }
+
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.17.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1"
+  }
+}
+</script>
+</head>
+  <body class="bg-[#0a0a0f] text-gray-200">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

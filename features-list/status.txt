@@ -1,0 +1,36 @@
+# V2 Features - Status Report
+
+## 1. Summary
+- Features To-Do: 8
+- Features In Progress: 0
+- Features Completed: 6
+- Features Canceled: 0
+
+---
+
+## 2. Feature Breakdown
+
+### To-Do (Not Started)
+- [ ] 07-message-interaction-toolbar: Standard actions (copy, bookmark, edit, delete).
+- [ ] 08-message-ai-actions: AI-powered actions (summarize, regenerate, rewrite).
+- [ ] 09-backend-process-transparency: "Inspect" feature to see the AI's pipeline.
+- [ ] 10-statusbar-metrics: App-wide status bar with message and token counts.
+- [ ] 11-discussion-mode-core: Foundational mode where agents can talk to each other.
+- [ ] 12-discussion-mode-ai-rules: AI generation of discussion rules and turn order.
+- [ ] 13-advanced-agent-configuration: Detailed agent profiles (specialty, personality, knowledge).
+- [ ] 14-automatic-agent-generation: AI-powered creation of new agents based on a goal or topic.
+
+### In Progress
+- (None)
+
+### Completed
+- [X] 01-conversation-lifecycle: Core ability to create, list, and delete conversations.
+- [X] 02-conversation-titling: Manual and AI-powered conversation renaming.
+- [X] 03-per-conversation-settings: Per-chat settings for system prompt and feature flags.
+- [X] 04-rich-message-content: Full Markdown support and secure HTML rendering.
+- [X] 05-message-metadata-display: Show timestamp, tokens, and response time on messages.
+- [X] 06-long-message-handling: Auto-summarize and collapse long AI responses.
+
+
+### Canceled
+- (None)

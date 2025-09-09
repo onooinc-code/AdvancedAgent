@@ -1,0 +1,30 @@
+# Feature: Automatic Agent Generation
+
+## 1. Objective
+To simplify the creation of new, specialized AI agents by using an AI to generate their profiles based on high-level user input.
+
+## 2. Core Functionality
+
+### 2.1. Generation Interface
+- A new "Generate Agent" feature will be added to the settings screen.
+- The user will be presented with a simple form to provide the basis for generation.
+
+### 2.2. Input Parameters
+The user can provide one or more of the following to guide the generation process:
+- **A Topic:** e.g., "Quantum Physics"
+- **A Context:** e.g., "We are writing a screenplay for a historical drama."
+- **A Goal:** e.g., "To create a meal plan for a family of four."
+
+### 2.3. Generation Process
+- The user's input is sent to a powerful AI model.
+- The model's task is to generate a complete agent profile, populating all the fields from the "Advanced Agent Configuration" feature:
+  - Specializes
+  - Name
+  - Personality
+  - Instructions
+  - Knowledge
+- For example, a "Goal" of "Review my code for bugs" might generate an agent named "Code Sentinel" with a specialization in "Software Quality Assurance" and instructions on common programming pitfalls.
+
+### 2.4. Review and Save
+- The generated agent profile is presented to the user for review.
+- The user can edit any of the generated fields before saving the new agent to their list.

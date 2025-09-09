@@ -1,0 +1,23 @@
+# Feature: Discussion Mode (AI-Generated Rules)
+
+## 1. Objective
+To automate the setup of Discussion Mode by having an AI generate the initial set of conversation rules and the agent reply order.
+
+## 2. Core Functionality
+
+### 2.1. Automatic Generation
+- When a user enables Discussion Mode for a conversation, an AI process is triggered.
+- This process analyzes the profiles of the agents currently active in the conversation.
+- The analysis considers:
+  - Agent System Instructions
+  - Agent Specializes (e.g., 'technical writer', 'critic')
+  - (Optional) The current conversation topic, if one can be inferred.
+
+### 2.2. Generated Output
+- Based on the analysis, the AI will generate and propose:
+  - **A set of Conversation Rules:** e.g., "Rule 1: The Creative Writer proposes an idea. Rule 2: The Technical Analyst evaluates its feasibility."
+  - **A Reply Order:** e.g., "User -> Agent 1 -> Agent 2 -> Agent 1 -> User..."
+
+### 2.3. User-Editable
+- The generated rules and order are presented to the user in an editable format within the conversation settings modal.
+- The user can accept the suggestions as-is or modify them to better suit their goal for the discussion.

@@ -1,0 +1,21 @@
+
+# Feature: Streaming AI Responses
+
+## 1. Objective
+To improve the user experience and perceived performance of the application by displaying AI-generated responses token by token, rather than waiting for the full response to be complete.
+
+## 2. Core Functionality
+
+### 2.1. Service Layer Integration
+- The `agentService` shall be updated to use the `ai.models.generateContentStream` method from the Gemini API instead of `generateContent`.
+- The service function will need to be adapted to handle the asynchronous stream of `GenerateContentResponse` chunks.
+
+### 2.2. State Management
+- The `useChatHandler` hook must be modified to handle streaming data.
+- When a stream begins, a new, empty AI message bubble should be added to the state.
+- As each chunk of text arrives from the stream, it should be appended to the `text` property of that message object, triggering a re-render.
+
+### 2.3. User Interface
+- The UI should smoothly render the incoming text into the message bubble.
+- A blinking cursor or similar visual indicator should be present at the end of the streaming text to indicate that content is still being generated.
+- The message input and other actions should remain disabled until the stream is fully complete.

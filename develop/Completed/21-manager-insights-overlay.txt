@@ -1,0 +1,18 @@
+# Feature: Manager Insights Overlay
+
+## 1. Objective
+To provide users with optional, real-time commentary from the AI Manager, offering transparency into its decision-making process during a conversation.
+
+## 2. Core Functionality
+
+### 2.1. Feature Toggle
+- A new setting, "Show Manager Insights," will be added to the `Conversation Settings` modal.
+- This toggle will allow users to enable or disable the insights on a per-conversation basis.
+
+### 2.2. Insight Display
+- When enabled, the manager's `rationale` for its decisions will be posted directly into the chat as a distinct system message.
+- This applies to both "Dynamic" mode (showing the rationale for the overall plan) and "Moderated Chat" mode (showing the rationale for each turn's decision).
+
+### 2.3. UI/UX
+- Insight messages will be visually distinct from regular agent or user messages.
+- They will be clearly labeled (e.g., "Manager Insight") and may have a unique icon or color scheme to differentiate them.

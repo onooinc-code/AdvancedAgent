@@ -1,0 +1,22 @@
+
+# Feature: Conversation Search
+
+## 1. Objective
+To allow users to quickly and easily find past conversations by searching for keywords or phrases within both the conversation titles and message content.
+
+## 2. Core Functionality
+
+### 2.1. UI Implementation
+- A search input field shall be added to the top of the conversation list sidebar.
+- As the user types into the search bar, the conversation list should be filtered in real-time.
+
+### 2.2. Search Logic
+- The search functionality will be client-side, filtering the existing `conversations` array from the state.
+- The filter logic should be case-insensitive.
+- A conversation should be included in the search results if the search term is found in:
+  - The conversation's `title`.
+  - The `text` property of any `message` within that conversation.
+
+### 2.3. State Management
+- A new piece of state (e.g., `searchQuery`) will be added to manage the content of the search bar.
+- The component rendering the conversation list will derive the filtered list based on the `conversations` array and the `searchQuery`. No modification to the master `conversations` array is needed.

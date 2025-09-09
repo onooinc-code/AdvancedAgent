@@ -1,0 +1,21 @@
+# Feature: Discussion Mode (Core)
+
+## 1. Objective
+To create an interactive mode where multiple AI agents can engage in a conversation with each other and the user, orchestrated by a manager agent.
+
+## 2. Core Functionality
+
+### 2.1. Mode Activation
+- "Discussion Mode" will be a new option selectable by the user for a conversation, likely within the per-conversation settings.
+
+### 2.2. Shared Context
+- In this mode, all agents in the conversation have access to the full conversation history. When one agent "speaks", the other agents are aware of that message.
+
+### 2.3. The Manager Agent's Role
+- The Agent Manager's role is expanded in this mode. It is responsible for defining:
+  - **The Reply Order:** The sequence in which agents should respond. This can be a strict turn-by-turn order or a more dynamic decision based on the ongoing dialogue.
+  - **The Conversation Rules:** A set of instructions that govern the discussion (e.g., "Agents must build upon each other's ideas," "Agent-2 should critique the solution proposed by Agent-1").
+
+### 2.4. User Control
+- The user can still interject in the conversation at any point.
+- The user has the ability to view and edit the Manager Agent's rules and reply order.

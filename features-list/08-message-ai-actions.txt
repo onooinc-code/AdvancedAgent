@@ -1,0 +1,26 @@
+# Feature: Message Interaction Toolbar (AI-Powered Actions)
+
+## 1. Objective
+To leverage AI to provide advanced interaction options for messages, improving conversation quality and efficiency.
+
+## 2. Core Functionality
+
+### 2.1. Toolbar Appearance
+- These actions will be part of the same hover-toolbar as the standard actions.
+
+### 2.2. AI-Powered Actions
+
+- **Summarize (AI Messages):**
+  - Appears on AI-generated messages.
+  - When clicked, it generates a concise summary of that specific message's content on-demand. The summary could appear in a pop-up or replace the message content with an option to revert.
+
+- **Regenerate (AI Messages):**
+  - Appears on AI-generated messages.
+  - When clicked, it sends the *preceding user prompt* to the AI again to generate a new, alternative response.
+  - The UI should handle the display of multiple responses for a single prompt (e.g., a "1 of 2" navigator).
+
+- **Rewrite (User Messages):**
+  - Appears on user-sent messages.
+  - When clicked, the AI is asked to rewrite the user's prompt for better clarity, detail, or effectiveness.
+  - The user is presented with the rewritten prompt and can choose to accept it.
+  - If accepted, the rewritten prompt is used to get a new response from the AI.

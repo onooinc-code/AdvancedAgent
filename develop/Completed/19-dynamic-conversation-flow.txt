@@ -1,0 +1,22 @@
+# Feature: Dynamic Conversation Flow
+
+## 1. Objective
+To evolve beyond fixed conversation modes by allowing the Agent Manager to dynamically create a response plan for each turn, including deciding which agent(s) should speak and in what order.
+
+## 2. Core Functionality
+
+### 2.1. Dynamic Mode
+- A new conversation mode, "Dynamic," will be added.
+- In this mode, the Agent Manager's first task after a user prompt is not just to pick the next speaker, but to formulate a plan.
+
+### 2.2. Plan Generation
+- The manager model will be called with a specialized prompt asking it to return a plan.
+- The plan will be a structured object (e.g., JSON) that specifies a sequence of actions.
+- Example Plan: `[ { "agentId": "agent-2", "task": "Analyze the user's code for bugs." }, { "agentId": "agent-1", "task": "Rewrite the code based on the analysis from agent-2." } ]`
+
+### 2.3. Plan Execution
+- The `useChatHandler` will parse this plan and execute the steps sequentially, much like the current "Discussion Mode," but with a plan that is unique to each turn.
+- The `task` from the plan will be injected into the context for each agent, giving them a specific, turn-by-turn goal.
+
+### 2.4. UI Feedback
+- The UI will display the manager's plan to the user before execution, providing transparency into the AI's reasoning.

@@ -1,0 +1,17 @@
+# Feature: Advanced Agent Configuration
+
+## 1. Objective
+To provide a more detailed and structured way for users to define and customize the AI agents beyond a single system instruction.
+
+## 2. Core Functionality
+
+### 2.1. Expanded Agent Profile
+- The agent configuration screen (in global settings) will be updated to include new, distinct fields for each agent.
+- These fields allow for a more modular and specific definition of an agent's characteristics.
+
+### 2.2. New Configuration Fields
+- **Specializes:** A short phrase or tag defining the agent's core function (e.g., "Data Analysis", "Creative Brainstorming", "Code Review").
+- **Name:** The display name of the agent.
+- **Personality:** A description of the agent's desired persona and conversational style (e.g., "Formal and professional", "Witty and sarcastic", "Friendly and encouraging").
+- **Instructions:** The core system prompt detailing the agent's tasks and constraints.
+- **Knowledge:** A dedicated area where the user can provide specific text-based knowledge, context, or data that the agent should treat as a primary source of truth.

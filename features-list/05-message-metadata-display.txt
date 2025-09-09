@@ -1,0 +1,17 @@
+# Feature: Message Metadata Display
+
+## 1. Objective
+To provide users with transparency and context for each message by displaying relevant metadata.
+
+## 2. Core Functionality
+
+### 2.1. Visual Distinction
+- Messages from the user and the AI agent(s) must be visually distinct (e.g., different alignment, colors, sender name).
+- The name of the responding AI agent shall be clearly displayed.
+
+### 2.2. Metadata Footer
+- A footer area will be added to each message bubble, visible on hover or permanently.
+- This footer will display the following information:
+  - **Creation Timestamp:** The date and time the message was created (e.g., "10:35 AM").
+  - **Token Count:** An estimated token count for the message content. This helps users understand the cost and context size.
+  - **Response Time (AI Messages Only):** For AI-generated messages, display the server response time in milliseconds (e.g., "1250ms"). This provides insight into model performance.

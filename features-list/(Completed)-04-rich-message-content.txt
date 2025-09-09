@@ -1,0 +1,28 @@
+# Feature: Rich Message Content
+
+## 1. Objective
+To enhance the expressiveness and utility of messages by supporting rich formatting, code, and multi-modal inputs.
+
+## 2. Core Functionality
+
+### 2.1. Rich Text Formatting
+- All messages (both user and AI) must support GitHub Flavored Markdown (GFM).
+- This includes, but is not limited to:
+  - Headings
+  - Bold, italics, strikethrough
+  - Blockquotes
+  - Ordered and unordered lists
+  - Tables
+  - Links
+  - Code blocks (inline and fenced)
+
+### 2.2. Code Block Syntax Highlighting
+- Fenced code blocks should automatically detect the language (e.g., ```javascript) and apply appropriate syntax highlighting for readability.
+
+### 2.3. Multi-Modal Input
+- The message input component will continue to support image attachments.
+- The attached image should be displayed within the message bubble and sent as context to the AI model.
+
+### 2.4. Secure HTML Rendering
+- For AI-generated code blocks specifically marked as `html`, a "View HTML" button or action shall be available.
+- Clicking this button will render the HTML content within a secure, sandboxed `<iframe>` to prevent security risks (e.g., XSS). This allows for safe previewing of generated web content.

@@ -1,0 +1,17 @@
+# Feature: Message Interaction Toolbar (Standard Actions)
+
+## 1. Objective
+To provide users with a standard set of tools to manage and interact with individual messages.
+
+## 2. Core Functionality
+
+### 2.1. Toolbar Appearance
+- A toolbar of icons shall appear when the user hovers their mouse over any message bubble.
+
+### 2.2. Standard Actions
+The toolbar will include the following actions:
+
+- **Copy:** Copies the full, raw content of the message to the user's clipboard.
+- **Bookmark:** Toggles a "bookmarked" state for the message. A new UI element (e.g., a separate panel) should be added to view all bookmarked messages from the conversation.
+- **Edit (User Messages Only):** Allows the user to modify the text of their own messages after sending. This action should be disabled for AI messages. Upon editing, the AI's subsequent response should be re-evaluated.
+- **Delete:** Allows the user to delete any message (user or AI). A confirmation dialog should appear before deletion. Deleting a message should be handled gracefully in the conversation flow.

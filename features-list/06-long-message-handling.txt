@@ -1,0 +1,19 @@
+# Feature: Long Message Handling
+
+## 1. Objective
+To improve the readability and user experience of conversations by automatically managing very long AI responses.
+
+## 2. Core Functionality
+
+### 2.1. Automatic Behavior
+- This feature is controlled by the "Auto-Summarization" feature flag in the per-conversation settings.
+- When enabled, any AI-generated response exceeding a predefined length (e.g., 20 lines or 1000 characters) will be automatically handled.
+
+### 2.2. Summarize and Collapse
+- The long message will be truncated to a short preview.
+- An AI-generated summary of the full message will be displayed prominently.
+- A "Show More" or "Expand" button will be present.
+
+### 2.3. User Interaction
+- Clicking the "Show More" button will expand the message to reveal its full, original content.
+- When expanded, a "Show Less" or "Collapse" button will be available to return it to the summarized state.

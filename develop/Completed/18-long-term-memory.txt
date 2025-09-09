@@ -1,0 +1,25 @@
+
+# Feature: Long-Term Memory
+
+## 1. Objective
+To implement a persistent memory system that allows AI agents to recall key facts, entities, and user preferences across different conversations, leading to more personalized and contextually-aware interactions.
+
+## 2. Core Functionality
+
+### 2.1. Memory Extraction
+- This will be tied to the "Memory Extraction" feature flag.
+- When a conversation concludes or reaches a certain length, a background process will be triggered.
+- This process sends the conversation history to a specialized AI model (or the manager model with a specific prompt).
+- The AI's task is to extract key-value pairs of important information (e.g., `{ "user_name": "Dave", "user_profession": "Software Engineer", "project_goal": "Build a React app" }`).
+
+### 2.2. Memory Storage
+- The extracted key-value pairs will be stored in a new, persistent data store (e.g., a new `useLocalStorage` key called `long-term-memory`).
+- The memory should be stored as a simple JSON object. New information should be merged with existing information.
+
+### 2.3. Memory Injection
+- At the start of a new AI response generation, the `agentService` will retrieve the contents of the long-term memory store.
+- This memory object will be serialized into a string and prepended to the agent's system instructions, similar to how the "Knowledge Base" is used.
+- For example: "Remember the following facts about the user: [memory content]. Now, proceed with your original instructions..."
+
+### 2.4. User Control
+- A new section should be added to the main Settings modal allowing users to view, edit, and clear the contents of the long-term memory. This provides transparency and control over what the AI "remembers".

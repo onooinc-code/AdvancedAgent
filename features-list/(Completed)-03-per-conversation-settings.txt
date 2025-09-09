@@ -1,0 +1,21 @@
+# Feature: Per-Conversation Configuration
+
+## 1. Objective
+To give users granular control over the behavior and features of each individual conversation, overriding the global default settings.
+
+## 2. Core Functionality
+
+### 2.1. Access Point
+- A "Conversation Settings" button or icon will be added to the main header or chat area.
+- This will open a modal or side panel specific to the currently active conversation.
+
+### 2.2. Configurable Options
+
+#### 2.2.1. Agent Configuration
+- **System Instructions:** A text area will allow the user to provide a custom system prompt that applies ONLY to the current conversation. This will guide the AI's personality, tone, and response style for this specific chat.
+
+#### 2.2.2. Feature Flags (Toggles)
+A series of on/off toggles will be available to control advanced features for the conversation:
+- **Memory Extraction:** Enable/disable the background process that extracts key information from the conversation to build a long-term memory.
+- **Proactive Suggestions:** Enable/disable the AI's ability to offer unsolicited suggestions for next steps, questions, or related topics.
+- **Auto-Summarization:** Enable/disable the automatic collapsing and summarization of long AI-generated messages to improve readability.

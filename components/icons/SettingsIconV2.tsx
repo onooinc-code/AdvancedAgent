@@ -1,0 +1,9 @@
+
+import React from 'react';
+
+export const SettingsIconV2 = ({ className = 'w-6 h-6' }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M19.395 14.6061L19.3932 14.6044C19.893 13.784 20.2469 12.9103 20.4285 12M4.60501 9.39394L4.60679 9.39562C5.10703 10.216 5.75311 10.9621 6.5 11.5M17.5 6.5C16.9621 5.75311 16.216 5.10703 15.3956 4.60679L15.3939 4.60501M4.57147 12C4.75308 11.0897 5.107 10.216 5.60679 9.39562M9.39394 4.60501L9.39562 4.60679C10.216 5.10703 10.9621 5.75311 11.5 6.5M14.6061 19.395L14.6044 19.3932C13.784 19.893 12.9103 20.2469 12 20.4285M9.39562 19.3932L9.39394 19.395C10.216 18.8929 10.9621 18.2469 11.5 17.5M17.5 17.5C18.2469 16.9621 18.8929 16.216 19.3932 15.3956L19.395 15.3939" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
