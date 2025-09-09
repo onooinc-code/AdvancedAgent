@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Conversation, Agent, AgentManager, Attachment, ManualSuggestion, Message, ConversationMode, LongTermMemoryData, PlanStep } from '../../types/index.ts';
 import * as AgentService from '../../services/chat/agentService.ts';
@@ -6,7 +5,7 @@ import * as ManagerService from '../../services/chat/managerService.ts';
 import * as MessageActionsService from '../../services/chat/messageActionsService.ts';
 import * as TokenCounter from '../../services/utils/tokenCounter.ts';
 import { ActionModalButton } from './useModalManager.ts';
-import { AIError } from '../../services/utils/errorHandler.ts';
+import { AIError, getApiErrorMessage } from '../../services/utils/errorHandler.ts';
 
 export type LoadingStage = 
     | { stage: 'idle' }
@@ -32,6 +31,8 @@ interface ChatHandlerProps {
     closeActionModal: () => void;
     logUsage: (tokens: number, agentId?: string, requestCount?: number) => void;
 }
+
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConversation, conversationMode, longTermMemory, onUpdateConversation, onAppendToMessageText, onFinalizeMessage, openActionModal, closeActionModal, logUsage }: ChatHandlerProps) => {
     const [loadingStage, setLoadingStage] = useState<LoadingStage>({ stage: 'idle' });
@@ -71,6 +72,10 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
                         onUpdateConversation(conversationId, { messages: currentMessages });
                         continueModeration = false;
                         break;
+                    }
+
+                    if (turnCount > 1) { // Don't delay the very first moderation action
+                        await delay(1200); 
                     }
 
                     setLoadingStage({ stage: 'moderating' });
@@ -164,6 +169,7 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
                 onUpdateConversation(conversationId, { messages: currentMessages });
 
                 for (let i = 0; i < planResponse.result.plan.length; i++) {
+                    await delay(1200); // Delay before every step to avoid rate-limiting
                     const step = planResponse.result.plan[i];
                     const respondingAgent = agents.find(a => a.id === step.agentId);
                     if (!respondingAgent) continue;
@@ -228,17 +234,19 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
                 setManualSuggestions(managerResponse.result);
             }
         } catch (error) {
-            let errorMessageText = 'An unexpected error occurred.';
+            let errorMessageText: string;
             if (error instanceof AIError) {
-                errorMessageText = `**Error in ${error.context}:**\n${error.userFriendlyMessage}`;
-                if (error.prompt) {
+                errorMessageText = error.userFriendlyMessage;
+                 if (error.prompt) {
                      errorMessageText += `\n\n**Failed Prompt:**\n\`\`\`\n${JSON.stringify(error.prompt, null, 2)}\n\`\`\``;
                 }
                 if (error.partialResponse) {
                     errorMessageText += `\n\n**Partial Response Received:**\n${error.partialResponse}`;
                 }
             } else if (error instanceof Error) {
-                errorMessageText = error.message;
+                errorMessageText = getApiErrorMessage(error);
+            } else {
+                 errorMessageText = 'An unexpected error occurred.';
             }
             onUpdateConversation(conversationId, { messages: [...currentMessages, { id: Date.now().toString() + '-err', sender: 'system', text: errorMessageText, timestamp: new Date().toISOString() }]});
         } finally {
@@ -279,17 +287,19 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
                 logUsage(TokenCounter.estimateTokens({ ...placeholderMessage, text: agentResponse.finalResult }), agentId, 1);
             }
         } catch (error) {
-             let errorMessageText = 'An unexpected error occurred.';
+            let errorMessageText: string;
             if (error instanceof AIError) {
-                errorMessageText = `**Error in ${error.context}:**\n${error.userFriendlyMessage}`;
-                if (error.prompt) {
+                errorMessageText = error.userFriendlyMessage;
+                 if (error.prompt) {
                      errorMessageText += `\n\n**Failed Prompt:**\n\`\`\`\n${JSON.stringify(error.prompt, null, 2)}\n\`\`\``;
                 }
                 if (error.partialResponse) {
                     errorMessageText += `\n\n**Partial Response Received:**\n${error.partialResponse}`;
                 }
             } else if (error instanceof Error) {
-                errorMessageText = error.message;
+                errorMessageText = getApiErrorMessage(error);
+            } else {
+                 errorMessageText = 'An unexpected error occurred.';
             }
             onUpdateConversation(conversationId, { messages: [...currentMessages, { id: Date.now().toString() + '-err', sender: 'system', text: errorMessageText, timestamp: new Date().toISOString() }]});
         } finally {
@@ -308,7 +318,7 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
             logUsage(0, 'manager', 1);
             openActionModal({ title: 'Summary', content: summary });
         } catch (error) {
-            const errorMessage = (error instanceof Error) ? error.message : 'Could not generate summary.';
+            const errorMessage = (error instanceof Error) ? getApiErrorMessage(error) : 'Could not generate summary.';
             openActionModal({ title: 'Error', content: errorMessage });
         }
     };
@@ -331,7 +341,7 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
                 ]
             });
         } catch (error) {
-             const errorMessage = (error instanceof Error) ? error.message : 'Could not rewrite prompt.';
+             const errorMessage = (error instanceof Error) ? getApiErrorMessage(error) : 'Could not rewrite prompt.';
              openActionModal({ title: 'Error', content: errorMessage });
         }
     };
@@ -378,7 +388,7 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
             
         } catch (error) {
             console.error("Error regenerating response:", error);
-            const errorMessage = (error instanceof Error) ? error.message : 'An unexpected error occurred during regeneration.';
+            const errorMessage = (error instanceof Error) ? getApiErrorMessage(error) : 'An unexpected error occurred during regeneration.';
             if(activeConversation) {
                 const currentMessages = activeConversation.messages;
                 onUpdateConversation(activeConversation.id, { messages: [...currentMessages, { id: Date.now().toString() + '-err', sender: 'system', text: `Error: ${errorMessage}`, timestamp: new Date().toISOString() }]});

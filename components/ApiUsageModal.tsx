@@ -1,10 +1,10 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppContext } from '../contexts/StateProvider.tsx';
-import { CloseIcon, CpuChipIcon, SparklesIcon } from './Icons.tsx';
+import { CloseIcon, CopyIcon, CheckIcon } from './Icons.tsx';
 
 export const ApiUsageModal: React.FC = () => {
     const { isApiUsageOpen, setIsApiUsageOpen, globalApiKey, agentManager, agents } = useAppContext();
+    const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
     if (!isApiUsageOpen) return null;
 
@@ -19,6 +19,12 @@ export const ApiUsageModal: React.FC = () => {
             source: agent.apiKey ? 'Self' : 'Global'
         }))
     ];
+
+    const handleCopy = (key: string) => {
+        navigator.clipboard.writeText(key);
+        setCopiedKey(key);
+        setTimeout(() => setCopiedKey(null), 1500);
+    };
 
     return (
         <div className={`fixed inset-0 flex justify-center items-center z-50 p-4 modal-overlay open`} onClick={() => setIsApiUsageOpen(false)}>
@@ -46,9 +52,20 @@ export const ApiUsageModal: React.FC = () => {
                                     <div className="flex justify-between items-start">
                                         <div>
                                             <h3 className="text-lg font-semibold text-green-400">{slot.type}: {slot.name}</h3>
-                                            <p className="text-sm text-gray-400 font-mono break-all">
-                                                {slot.effectiveKey ? `...${slot.effectiveKey.slice(-8)}` : 'Not Set'}
-                                            </p>
+                                            <div className="flex items-center gap-2">
+                                                <p className="text-sm text-gray-400 font-mono break-all">
+                                                    {slot.effectiveKey ? `...${slot.effectiveKey.slice(-8)}` : 'Not Set'}
+                                                </p>
+                                                 {slot.effectiveKey && (
+                                                    <button 
+                                                        onClick={() => handleCopy(slot.effectiveKey!)}
+                                                        className="p-1 rounded-full text-gray-400 hover:bg-white/10 hover:text-white transition-colors"
+                                                        title="Copy API Key"
+                                                    >
+                                                        {copiedKey === slot.effectiveKey ? <CheckIcon className="w-4 h-4 text-green-400" /> : <CopyIcon className="w-4 h-4" />}
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
                                         <span className={`text-xs font-bold px-2 py-1 rounded-full ${slot.source === 'Self' ? 'bg-green-500/30 text-green-300' : 'bg-gray-500/30 text-gray-300'}`}>
                                             {slot.source}

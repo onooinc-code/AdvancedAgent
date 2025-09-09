@@ -1,10 +1,9 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Message, Agent, Conversation } from '../types/index.ts';
 import { MANAGER_COLOR } from '../constants.ts';
 import { useAppContext } from '../contexts/StateProvider.tsx';
 import { Avatar } from './Avatar.tsx';
-import { CopyIcon, BookmarkIcon, BookmarkFilledIcon, EditIcon, TrashIcon, RegenerateIcon, RewriteIcon, SummarizeIcon, CodeBracketIcon, SitemapIcon, AlignLeftIcon, AlignRightIcon, ZoomInIcon, ZoomOutIcon } from './Icons.tsx';
+import { CopyIcon, BookmarkIcon, BookmarkFilledIcon, EditIcon, TrashIcon, RegenerateIcon, RewriteIcon, SummarizeIcon, CodeBracketIcon, SitemapIcon, AlignLeftIcon, AlignRightIcon, ZoomInIcon, ZoomOutIcon, TextDirectionLeftIcon, TextDirectionRightIcon } from './Icons.tsx';
 import { PlanDisplay } from './PlanDisplay.tsx';
 
 declare const marked: any;
@@ -74,9 +73,16 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
     const handleAlignment = (align: 'left' | 'right') => {
         setSettings(prev => ({ ...prev, alignment: align }));
     };
+    const handleTextDirection = (dir: 'ltr' | 'rtl') => {
+        setSettings(prev => ({ ...prev, textDirection: dir }));
+    };
     const handleZoom = (direction: 'in' | 'out') => {
         setSettings(prev => ({ ...prev, scale: Math.max(0.5, Math.min(1.5, prev.scale + (direction === 'in' ? 0.1 : -0.1))) }));
-    }
+    };
+    const handleFontSize = (direction: 'up' | 'down') => {
+        setSettings(prev => ({ ...prev, fontSize: Math.max(0.75, Math.min(1.5, prev.fontSize + (direction === 'up' ? 0.1 : -0.1))) }));
+    };
+
 
     const isPotentiallyLong = !isUser && (currentMessageText.split('\n').length > LONG_MESSAGE_LINES || currentMessageText.length > LONG_MESSAGE_CHARS);
     const isLongMessageEnabled = !message.isStreaming && isPotentiallyLong && featureFlags?.autoSummarization;
@@ -241,7 +247,11 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
                     </div>
 
                     {/* Content */}
-                    <div className={`p-4 ${isUser ? 'content-bg-user prose-user' : 'content-bg-agent prose-agent'}`}>
+                    <div
+                        className={`p-4 ${isUser ? 'content-bg-user prose-user' : 'content-bg-agent prose-agent'}`}
+                        dir={settings.textDirection}
+                        style={{ fontSize: `${settings.fontSize}rem` }}
+                    >
                         {message.plan ? (
                             <PlanDisplay plan={message.plan} />
                         ) : (
@@ -309,8 +319,10 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
                              {message.responseTimeMs && <span className="ml-2 font-mono text-xs">{message.responseTimeMs}ms</span>}
                             <ActionButton onClick={() => handleAlignment('left')} title="Align Left" aria-label="Align message left" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><AlignLeftIcon /></ActionButton>
                             <ActionButton onClick={() => handleAlignment('right')} title="Align Right" aria-label="Align message right" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><AlignRightIcon /></ActionButton>
-                            <ActionButton onClick={() => handleZoom('out')} title="Zoom Out" aria-label="Zoom out" disabled={settings.scale <= 0.5} className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><ZoomOutIcon /></ActionButton>
-                            <ActionButton onClick={() => handleZoom('in')} title="Zoom In" aria-label="Zoom in" disabled={settings.scale >= 1.5} className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><ZoomInIcon /></ActionButton>
+                            <ActionButton onClick={() => handleTextDirection('ltr')} title="Text LTR" aria-label="Set text direction to left-to-right" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><TextDirectionLeftIcon /></ActionButton>
+                            <ActionButton onClick={() => handleTextDirection('rtl')} title="Text RTL" aria-label="Set text direction to right-to-left" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><TextDirectionRightIcon /></ActionButton>
+                            <ActionButton onClick={() => handleFontSize('down')} title="Decrease Font Size" aria-label="Decrease font size" disabled={settings.fontSize <= 0.75} className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><ZoomOutIcon /></ActionButton>
+                            <ActionButton onClick={() => handleFontSize('up')} title="Increase Font Size" aria-label="Increase font size" disabled={settings.fontSize >= 1.5} className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><ZoomInIcon /></ActionButton>
                             <ActionButton onClick={handleCopy} title="Copy message text" aria-label="Copy message" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}>
                                 <CopyIcon className="w-5 h-5" />
                             </ActionButton>

@@ -1,4 +1,3 @@
-
 export * from './icons/SettingsIconV2.tsx';
 export * from './icons/HistoryIconV2.tsx';
 export * from './icons/SendIcon.tsx';
@@ -32,3 +31,5 @@ export * from './icons/AlignLeftIcon.tsx';
 export * from './icons/AlignRightIcon.tsx';
 export * from './icons/ZoomInIcon.tsx';
 export * from './icons/ZoomOutIcon.tsx';
+export * from './icons/TextDirectionLeftIcon.tsx';
+export * from './icons/TextDirectionRightIcon.tsx';
