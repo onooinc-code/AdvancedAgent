@@ -1,4 +1,3 @@
-import React from 'react';
 
 export const EditIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
   <svg
