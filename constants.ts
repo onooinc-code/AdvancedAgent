@@ -1,5 +1,4 @@
 
-
 import { Agent, AgentManager } from './types/index.ts';
 
 export const DEFAULT_AGENTS: Agent[] = [

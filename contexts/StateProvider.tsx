@@ -1,5 +1,4 @@
 
-
 import React, { createContext, useContext, useRef, useCallback, useState } from 'react';
 import { Agent, AgentManager, ConversationMode, Attachment, ManualSuggestion, HistoryView, Conversation, PipelineStep, UsageMetrics, Message, LongTermMemoryData, BubbleSettings } from '../types/index.ts';
 import { useLocalStorage } from '../hooks/useLocalStorage.ts';

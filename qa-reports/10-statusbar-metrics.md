@@ -44,47 +44,4 @@
 *   **Then:** It should return `3` (since 11 chars / 4 = 2.75, rounded up).
 
 **Scenario: Token estimation for a message with an image**
-*   **Given:** A message object with text "Look at this" and an attachment.
-*   **When:** The `estimateTokens` function is called with the message.
-*   **Then:** It should return `262` (12 chars / 4 = 3, plus 258 for the image, plus 1 for the text). Wait, (12/4) = 3. Plus 258. Is it 261? `Math.ceil(12/4) = 3`. Okay, 261. Let's recheck. "Look at this" is 12 chars. `ceil(12/4) = 3`. 3 + 258 = 261. My initial math was wrong.
-*   **Then:** It should return `261` (`ceil(12/4)` = 3 for text, + 258 for the image).
-
-**Scenario: `logUsage` creates a new daily entry**
-*   **Given:** The `useUsageTracker` hook is initialized with an empty `dailyUsage` array.
-*   **When:** `logUsage(100)` is called for the first time.
-*   **Then:** The `usageMetrics` state should have `totalTokens: 100`.
-*   **And:** The `dailyUsage` array should contain one item for today's date with `tokens: 100`.
-
-**Scenario: `logUsage` updates an existing daily entry**
-*   **Given:** `usageMetrics` already has an entry for today with `tokens: 150`. The `totalTokens` is 500.
-*   **When:** `logUsage(50)` is called.
-*   **Then:** The `usageMetrics` state should have `totalTokens: 550`.
-*   **And:** The `dailyUsage` entry for today should be updated to have `tokens: 200`.
-
----
-
-### **Part 3: End-to-End (E2E) Manual Test Plan**
-
-**Test Case 1: Verify status bar updates on new message**
-*   **Objective:** Confirm that the conversation metrics in the status bar update in real-time.
-*   **Steps:**
-    1.  Start a new conversation. Observe the status bar shows "Messages: 0" and "Tokens: 0" for the conversation.
-    2.  Send a message: "Hello".
-    3.  Wait for the AI to respond.
-*   **Expected Result:** After the AI responds, the status bar should update. The "Messages" count should now be 2. The "Tokens" count should be a positive number, reflecting the estimated tokens for both messages.
-
-**Test Case 2: Verify global usage metrics are persistent**
-*   **Objective:** Confirm that the global usage data is saved and loaded correctly across sessions.
-*   **Steps:**
-    1.  Have a short conversation with the AI. Note the "Today" and "Total" token counts in the status bar.
-    2.  Reload the entire application (F5 or refresh button).
-    3.  Select the same conversation.
-*   **Expected Result:** After reloading, the "Today" and "Total" token counts in the status bar should be the same as they were before the reload.
-
-**Test Case 3: Verify metrics with image attachments**
-*   **Objective:** Confirm that image attachments are correctly included in token estimates.
-*   **Steps:**
-    1.  Start a new conversation. Note the initial token count (0).
-    2.  Attach an image and send it with no text.
-    3.  Wait for the AI response.
-*   **Expected Result:** The conversation token count should increase by a significant amount (over 258), reflecting the cost of the image in the user's prompt. The global token counters should also increase accordingly.
+*   **Given:** A message object with text "

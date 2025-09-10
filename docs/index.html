@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced AI Assistant - Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/13.0.2/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'Roboto Mono', monospace;
+            --color-bg: #0a0a0f;
+            --color-pane: rgba(23, 26, 43, 0.5);
+            --color-border: rgba(129, 140, 248, 0.2);
+            --color-neon-indigo: rgba(129, 140, 248, 1);
+            --color-neon-cyan: rgba(34, 211, 238, 1);
+        }
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--color-bg);
+            color: #d1d5db; /* gray-300 */
+        }
+        /* Glassmorphism & Neon Effects */
+        .glass-pane {
+            background-color: var(--color-pane);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid var(--color-border);
+        }
+        .neon-glow-indigo {
+            box-shadow: 0 0 5px rgba(129, 140, 248, 0.6), 0 0 10px rgba(129, 140, 248, 0.4);
+        }
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        @keyframes animated-gradient-text {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(129, 140, 248, 0.4); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(129, 140, 248, 0.6); }
+
+        /* Prose Overrides for Docs */
+        .prose-docs {
+            --tw-prose-body: #d1d5db;
+            --tw-prose-headings: #ffffff;
+            --tw-prose-lead: #a5b4fc;
+            --tw-prose-links: #c7d2fe;
+            --tw-prose-bold: #ffffff;
+            --tw-prose-counters: #a5b4fc;
+            --tw-prose-bullets: #a5b4fc;
+            --tw-prose-hr: rgba(255, 255, 255, 0.2);
+            --tw-prose-quotes: #e5e7eb;
+            --tw-prose-quote-borders: #a5b4fc;
+            --tw-prose-captions: #9ca3af;
+            --tw-prose-code: #c7d2fe;
+            --tw-prose-pre-code: #c7d2fe;
+            --tw-prose-pre-bg: rgba(0, 0, 0, 0.3);
+        }
+        .nav-link.active {
+            background-color: rgba(129, 140, 248, 0.3);
+            border-left-color: var(--color-neon-indigo);
+            color: #fff;
+            box-shadow: 0 0 8px rgba(129, 140, 248, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-screen-xl mx-auto">
+        <header class="text-center mb-12 animate-fade-in-up">
+            <h1 class="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400"
+                style="background-size: 200% 200%; animation: animated-gradient-text 5s ease infinite;">
+                Advanced AI Assistant
+            </h1>
+            <p class="text-xl text-gray-400 mt-2">Project Documentation</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <nav id="docs-nav" class="lg:col-span-1 glass-pane rounded-xl p-6 self-start animate-fade-in-up" style="animation-delay: 0.2s;">
+                <h2 class="text-lg font-semibold mb-4 text-white">Table of Contents</h2>
+                <ul class="space-y-2">
+                    <li><a href="#README.md" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Project Overview</a></li>
+                    <li><a href="#docs/database_migration_plan.md" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">DB Migration Plan</a></li>
+                    <li><a href="#docs/future_features_with_backend.md" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Future Vision</a></li>
+                </ul>
+            </nav>
+            <main id="docs-content" class="lg:col-span-3 glass-pane rounded-xl p-8 animate-fade-in-up" style="animation-delay: 0.4s;">
+                <div class="prose prose-docs max-w-none">
+                    <p class="text-center text-gray-400">Select a topic from the navigation to get started.</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentEl = document.getElementById('docs-content');
+
+            const loadContent = async (url) => {
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error(`Network response was not ok for ${url}`);
+                    const markdown = await response.text();
+                    contentEl.innerHTML = `<div class="prose prose-docs max-w-none">${DOMPurify.sanitize(marked.parse(markdown))}</div>`;
+                } catch (error) {
+                    console.error('Failed to load content:', error);
+                    contentEl.innerHTML = '<div class="prose prose-docs max-w-none"><p class="text-red-400">Failed to load documentation file. In this sandboxed environment, fetching local files may be restricted. Please run on a local server to view documentation.</p></div>';
+                }
+            };
+
+            const setActiveLink = (link) => {
+                if (!link) return;
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            };
+
+            const handleNavigation = () => {
+                const hash = window.location.hash.substring(1) || 'README.md';
+                const activeLink = document.querySelector(`.nav-link[href="#${hash}"]`);
+                setActiveLink(activeLink);
+                loadContent(hash);
+            };
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const url = e.currentTarget.getAttribute('href');
+                    if (window.location.hash !== url) {
+                        window.location.hash = url;
+                    } else {
+                        handleNavigation();
+                    }
+                });
+            });
+
+            window.addEventListener('hashchange', handleNavigation);
+            handleNavigation(); // Initial load
+        });
+    </script>
+</body>
+</html>

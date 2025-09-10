@@ -1,5 +1,5 @@
 {
-  "name": "Advanced AI Assistant",
+  "name": "Monica",
   "description": "An advanced AI assistant that allows you to chat with multiple AI agents in the same conversation. Manage the dialogue flow with an AI manager or manual suggestions, configure agent behaviors, and view a structured chat history.",
   "requestFramePermissions": []
 }
