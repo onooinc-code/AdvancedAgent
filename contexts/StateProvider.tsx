@@ -1,3 +1,5 @@
+
+
 import React, { createContext, useContext, useRef, useCallback, useState } from 'react';
 import { Agent, AgentManager, ConversationMode, Attachment, ManualSuggestion, HistoryView, Conversation, PipelineStep, UsageMetrics, Message, LongTermMemoryData, BubbleSettings } from '../types/index.ts';
 import { useLocalStorage } from '../hooks/useLocalStorage.ts';
@@ -120,6 +122,14 @@ interface AppState {
     setAgentBubbleSettings: React.Dispatch<React.SetStateAction<BubbleSettings>>;
     userBubbleSettings: BubbleSettings;
     setUserBubbleSettings: React.Dispatch<React.SetStateAction<BubbleSettings>>;
+
+    // Bookmarks Panel
+    isBookmarksPanelOpen: boolean;
+    setIsBookmarksPanelOpen: (isOpen: boolean) => void;
+
+    // Agent Status
+    handleToggleAgentEnabled: (agentId: string) => void;
+    lastTurnAgentIds: Set<string>;
 }
 
 const AppContext = createContext<AppState | undefined>(undefined);
@@ -134,9 +144,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const [agentBubbleSettings, setAgentBubbleSettings] = useLocalStorage<BubbleSettings>('agent-bubble-settings', { alignment: 'left', scale: 1, textDirection: 'ltr', fontSize: 1 });
     const [userBubbleSettings, setUserBubbleSettings] = useLocalStorage<BubbleSettings>('user-bubble-settings', { alignment: 'right', scale: 1, textDirection: 'ltr', fontSize: 1 });
     
-    // 2. Refs
+    // 2. Refs & Local State
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [isExtractingMemory, setIsExtractingMemory] = useState(false);
+    const [lastTurnAgentIds, setLastTurnAgentIds] = useState<Set<string>>(new Set());
 
     // 3. Custom Hooks for logic domains
     const modalManager = useModalManager();
@@ -144,8 +155,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const historyHandler = useHistoryHandler();
     const usageTracker = useUsageTracker();
     const memoryManager = useMemoryManager();
+    
+    const enabledAgents = agents.filter(a => a.isEnabled ?? true);
+
     const chatHandler = useChatHandler({
-        agents,
+        agents: enabledAgents, // Pass only enabled agents for decision-making
         agentManager,
         globalApiKey,
         activeConversation: conversationManager.activeConversation,
@@ -157,6 +171,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         openActionModal: modalManager.openActionModal,
         closeActionModal: modalManager.closeActionModal,
         logUsage: usageTracker.logUsage,
+        setLastTurnAgentIds: setLastTurnAgentIds,
     });
     
     // 4. Combined loading state for UI components
@@ -203,6 +218,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         } finally {
             setIsExtractingMemory(false);
         }
+    };
+
+    const handleToggleAgentEnabled = (agentId: string) => {
+        setAgents(prev => prev.map(agent => 
+            agent.id === agentId
+                ? { ...agent, isEnabled: !(agent.isEnabled ?? true) }
+                : agent
+        ));
     };
     
     // 6. Assemble the context value, ensuring the AppState interface is matched
@@ -263,6 +286,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setIsTeamGeneratorOpen: modalManager.setIsTeamGeneratorOpen,
         isApiUsageOpen: modalManager.isApiUsageOpen,
         setIsApiUsageOpen: modalManager.setIsApiUsageOpen,
+        isBookmarksPanelOpen: modalManager.isBookmarksPanelOpen,
+        setIsBookmarksPanelOpen: modalManager.setIsBookmarksPanelOpen,
 
         // Message actions from useConversationManager
         handleToggleMessageBookmark: conversationManager.handleToggleMessageBookmark,
@@ -307,6 +332,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setAgentBubbleSettings,
         userBubbleSettings,
         setUserBubbleSettings,
+
+        // Agent Status
+        handleToggleAgentEnabled,
+        lastTurnAgentIds,
     };
 
     return (

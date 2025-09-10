@@ -30,11 +30,12 @@ interface ChatHandlerProps {
     openActionModal: (config: { title: string; content: string; actions?: ActionModalButton[] }) => void;
     closeActionModal: () => void;
     logUsage: (tokens: number, agentId?: string, requestCount?: number) => void;
+    setLastTurnAgentIds: (ids: Set<string>) => void;
 }
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConversation, conversationMode, longTermMemory, onUpdateConversation, onAppendToMessageText, onFinalizeMessage, openActionModal, closeActionModal, logUsage }: ChatHandlerProps) => {
+export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConversation, conversationMode, longTermMemory, onUpdateConversation, onAppendToMessageText, onFinalizeMessage, openActionModal, closeActionModal, logUsage, setLastTurnAgentIds }: ChatHandlerProps) => {
     const [loadingStage, setLoadingStage] = useState<LoadingStage>({ stage: 'idle' });
     const [manualSuggestions, setManualSuggestions] = useState<ManualSuggestion[]>([]);
     
@@ -42,6 +43,9 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
 
     const handleSendMessage = async (text: string, attachment?: Attachment) => {
         if ((!text.trim() && !attachment) || isChatLoading || !activeConversation) return;
+
+        const usedAgentIds = new Set<string>();
+        setLastTurnAgentIds(new Set()); // Clear previous turn's agents immediately
 
         const conversationId = activeConversation.id;
         const userMessage: Message = { id: Date.now().toString(), text, sender: 'user', attachment, timestamp: new Date().toISOString() };
@@ -110,6 +114,7 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
                              continueModeration = false; // Agent not found, stop.
                              break;
                         }
+                        usedAgentIds.add(nextSpeakerAgentId);
                         
                         setLoadingStage({ stage: 'generating', agentId: respondingAgent.id });
                         const aiMessageId = `${Date.now()}-ai-${turnCount}`;
@@ -173,6 +178,7 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
                     const step = planResponse.result.plan[i];
                     const respondingAgent = agents.find(a => a.id === step.agentId);
                     if (!respondingAgent) continue;
+                    usedAgentIds.add(step.agentId);
 
                     setLoadingStage({ stage: 'executing_plan', agentId: step.agentId, task: step.task, current: i + 1, total: planResponse.result.plan.length });
 
@@ -200,6 +206,7 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
                 if (nextSpeakerId) {
                     const respondingAgent = agents.find(a => a.id === nextSpeakerId);
                     if (respondingAgent) {
+                        usedAgentIds.add(nextSpeakerId);
                         setLoadingStage({ stage: 'generating', agentId: respondingAgent.id });
                         
                         const aiMessageId = `${Date.now()}-ai`;
@@ -251,11 +258,15 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
             onUpdateConversation(conversationId, { messages: [...currentMessages, { id: Date.now().toString() + '-err', sender: 'system', text: errorMessageText, timestamp: new Date().toISOString() }]});
         } finally {
             setLoadingStage({ stage: 'idle' });
+            setLastTurnAgentIds(usedAgentIds);
         }
     };
 
     const handleManualSelection = async (agentId: string) => {
         if (!activeConversation) return;
+        const usedAgentIds = new Set<string>([agentId]);
+        setLastTurnAgentIds(new Set());
+
         const conversationId = activeConversation.id;
 
         setManualSuggestions([]);
@@ -304,6 +315,7 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
             onUpdateConversation(conversationId, { messages: [...currentMessages, { id: Date.now().toString() + '-err', sender: 'system', text: errorMessageText, timestamp: new Date().toISOString() }]});
         } finally {
             setLoadingStage({ stage: 'idle' });
+            setLastTurnAgentIds(usedAgentIds);
         }
     };
 
@@ -348,6 +360,9 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
 
     const handleRegenerateResponse = async (aiMessageId: string) => {
         if (!activeConversation) return;
+        const usedAgentIds = new Set<string>();
+        setLastTurnAgentIds(new Set());
+        
         setLoadingStage({ stage: 'generating' });
         const systemInstructionOverride = activeConversation.systemInstructionOverride;
 
@@ -360,6 +375,7 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
             
             const agent = agents.find(a => a.id === activeConversation.messages[aiMessageIndex].sender);
             if (!agent) return;
+            usedAgentIds.add(agent.id);
 
             setLoadingStage({ stage: 'generating', agentId: agent.id });
             
@@ -395,6 +411,7 @@ export const useChatHandler = ({ agents, agentManager, globalApiKey, activeConve
             }
         } finally {
             setLoadingStage({ stage: 'idle' });
+            setLastTurnAgentIds(usedAgentIds);
         }
     };
 

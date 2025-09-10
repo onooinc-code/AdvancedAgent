@@ -42,6 +42,16 @@
       .animate-fade-in-up {
         animation: fadeInUp 0.5s ease-out forwards;
       }
+
+      @keyframes highlight-flash {
+        0% { background-color: rgba(129, 140, 248, 0); }
+        50% { background-color: rgba(129, 140, 248, 0.3); }
+        100% { background-color: rgba(129, 140, 248, 0); }
+      }
+      .highlight-flash {
+        animation: highlight-flash 1.5s ease-out;
+        border-radius: 0.75rem; /* To match bubble's rounded corners */
+      }
       
       @keyframes blink {
         50% { opacity: 0; }
@@ -54,6 +64,26 @@
         animation: blink 1s step-end infinite;
         vertical-align: text-bottom;
         margin-left: 2px;
+      }
+
+      @keyframes animated-gradient-text {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      @keyframes animated-gradient-bg {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      
+      @keyframes flashing-dot {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.3; transform: scale(0.8); }
+      }
+      .flashing-dot {
+        animation: flashing-dot 1.5s ease-in-out infinite;
       }
 
       /* Modal Styles */

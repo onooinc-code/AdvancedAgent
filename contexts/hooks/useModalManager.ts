@@ -34,6 +34,7 @@ export const useModalManager = () => {
     const [isAgentStatsOpen, setIsAgentStatsOpen] = useState(false);
     const [isTeamGeneratorOpen, setIsTeamGeneratorOpen] = useState(false);
     const [isApiUsageOpen, setIsApiUsageOpen] = useState(false);
+    const [isBookmarksPanelOpen, setIsBookmarksPanelOpen] = useState(false);
 
     const handleShowHtmlPreview = (html: string) => {
         setHtmlPreviewContent(html);
@@ -92,5 +93,6 @@ export const useModalManager = () => {
         isAgentStatsOpen, setIsAgentStatsOpen,
         isTeamGeneratorOpen, setIsTeamGeneratorOpen,
         isApiUsageOpen, setIsApiUsageOpen,
+        isBookmarksPanelOpen, setIsBookmarksPanelOpen,
     };
 };

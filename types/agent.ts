@@ -1,4 +1,5 @@
 
+
 export interface Agent {
   id: string;
   name: string;
@@ -13,6 +14,7 @@ export interface Agent {
   textColor: string;
   outputFormat?: string;
   knowledge?: string;
+  isEnabled?: boolean;
 }
 
 export interface AgentManager {

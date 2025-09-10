@@ -1,4 +1,5 @@
 
+
 import { Agent, AgentManager } from './types/index.ts';
 
 export const DEFAULT_AGENTS: Agent[] = [
@@ -16,6 +17,7 @@ export const DEFAULT_AGENTS: Agent[] = [
     textColor: 'text-white',
     outputFormat: 'Markdown',
     knowledge: 'Familiar with classic literature, including Shakespeare, Dickens, and Hemingway. Understands various poetic forms like sonnets, haikus, and free verse.',
+    isEnabled: true,
   },
   {
     id: 'agent-2',
@@ -31,6 +33,7 @@ export const DEFAULT_AGENTS: Agent[] = [
     textColor: 'text-white',
     outputFormat: 'JSON, Markdown',
     knowledge: 'Understands statistical analysis methods. Proficient in interpreting charts and graphs. Has a foundational knowledge of computer science principles.',
+    isEnabled: true,
   },
   {
     id: 'agent-3',
@@ -46,6 +49,7 @@ export const DEFAULT_AGENTS: Agent[] = [
     textColor: 'text-white',
     outputFormat: 'Plain Text',
     knowledge: 'Trained in non-violent communication techniques. Understands basic principles of cognitive-behavioral therapy (CBT). Prioritizes user well-being and emotional safety.',
+    isEnabled: true,
   },
 ];
 

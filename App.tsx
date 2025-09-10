@@ -18,6 +18,7 @@ import { useAppContext } from './contexts/StateProvider.tsx';
 import { AgentStatsModal } from './components/AgentStatsModal.tsx';
 import { TeamGeneratorModal } from './components/TeamGeneratorModal.tsx';
 import { ApiUsageModal } from './components/ApiUsageModal.tsx';
+import { BookmarkedMessagesPanel } from './components/BookmarkedMessagesPanel.tsx';
 
 export default function App() {
   const { 
@@ -32,6 +33,7 @@ export default function App() {
     setIsConversationSettingsOpen,
     setConversationMode,
     handleShowHistory,
+    isBookmarksPanelOpen
   } = useAppContext();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -95,21 +97,24 @@ export default function App() {
   }, [isSettingsOpen, isHistoryOpen, isConversationSettingsOpen, setIsSettingsOpen, setIsHistoryOpen, setIsConversationSettingsOpen, setConversationMode, handleShowHistory, activeConversation]);
 
   return (
-    <div className="flex h-screen bg-[#0a0a0f] text-gray-200" style={{fontFamily: "'Inter', sans-serif"}}>
+    <div className="flex h-screen bg-[#0a0a0f] text-gray-200 overflow-hidden" style={{fontFamily: "'Inter', sans-serif"}}>
         <ConversationList isOpen={isSidebarOpen} />
-        <div className="flex flex-col flex-1">
-            <Header 
-              isSidebarOpen={isSidebarOpen} 
-              toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-              conversation={activeConversation}
-            />
-            <div className="flex-1 flex flex-col min-h-0">
-              <MessageList conversation={activeConversation} />
-              {activeConversation && conversationMode === 'Manual' && <ManualSuggestions />}
-              {activeConversation && <LiveStatusIndicator />}
-              {activeConversation && <MessageInput />}
-            </div>
-            <StatusBar />
+        <div className="flex flex-1 min-w-0">
+            <main className="flex flex-col flex-1">
+                <Header 
+                  isSidebarOpen={isSidebarOpen} 
+                  toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                  conversation={activeConversation}
+                />
+                <div className="flex-1 flex flex-col min-h-0">
+                  <MessageList conversation={activeConversation} />
+                  {activeConversation && conversationMode === 'Manual' && <ManualSuggestions />}
+                  {activeConversation && <LiveStatusIndicator />}
+                  {activeConversation && <MessageInput />}
+                </div>
+                <StatusBar />
+            </main>
+            <BookmarkedMessagesPanel isOpen={isBookmarksPanelOpen} />
         </div>
         <SettingsModal />
         <HistoryModal />

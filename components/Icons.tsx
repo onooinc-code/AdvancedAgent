@@ -33,3 +33,4 @@ export * from './icons/ZoomInIcon.tsx';
 export * from './icons/ZoomOutIcon.tsx';
 export * from './icons/TextDirectionLeftIcon.tsx';
 export * from './icons/TextDirectionRightIcon.tsx';
+export * from './icons/PowerIcon.tsx';

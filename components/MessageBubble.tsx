@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { Message, Agent, Conversation } from '../types/index.ts';
 import { MANAGER_COLOR } from '../constants.ts';
@@ -218,7 +219,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
     }[settings.alignment];
 
     return (
-        <div className={`w-full px-4 md:px-8 mb-6 animate-fade-in-up flex ${alignmentClass}`}>
+        <div id={message.id} className={`w-full px-4 md:px-8 mb-6 animate-fade-in-up flex ${alignmentClass}`}>
             <div className={`flex items-start w-auto max-w-full ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
                 <Avatar name={senderName} color={agentColorIndicator} />
                 <div 
