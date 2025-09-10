@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monica - Project Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --font-sans: 'Inter', sans-serif; --font-mono: 'Roboto Mono', monospace; --color-bg: #0a0a0f; --color-pane: rgba(23, 26, 43, 0.5); --color-border: rgba(129, 140, 248, 0.2); --color-neon-indigo: rgba(129, 140, 248, 1); --color-neon-cyan: rgba(34, 211, 238, 1); }
+        body { font-family: var(--font-sans); background-color: var(--color-bg); color: #d1d5db; }
+        .glass-pane { background-color: var(--color-pane); backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%); border: 1px solid var(--color-border); }
+        .neon-glow-indigo { box-shadow: 0 0 5px rgba(129, 140, 248, 0.6), 0 0 10px rgba(129, 140, 248, 0.4); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        @keyframes animated-gradient-text { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(129, 140, 248, 0.4); border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: rgba(129, 140, 248, 0.6); }
+        .prose-docs { --tw-prose-body: #d1d5db; --tw-prose-headings: #ffffff; --tw-prose-lead: #a5b4fc; --tw-prose-links: #c7d2fe; --tw-prose-bold: #ffffff; --tw-prose-counters: #a5b4fc; --tw-prose-bullets: #a5b4fc; --tw-prose-hr: rgba(255, 255, 255, 0.2); --tw-prose-quotes: #e5e7eb; --tw-prose-quote-borders: #a5b4fc; --tw-prose-captions: #9ca3af; --tw-prose-code: #c7d2fe; --tw-prose-pre-code: #c7d2fe; --tw-prose-pre-bg: rgba(0, 0, 0, 0.3); }
+        .nav-link.active { background-color: rgba(129, 140, 248, 0.3); border-left-color: var(--color-neon-indigo); color: #fff; box-shadow: 0 0 8px rgba(129, 140, 248, 0.5); }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <audio id="click-sound" src="data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU9vT19PAAAAAAACAgIAAASEgAABIYAICwgJAgALLgUIiAECCw8JEgABCIYACAwFCIsABQYHCQoBBAkJCAACCQkIAAMJCQgABQkJCQAHCQkIAAgJCQkACQkJCQAJCQkIAAYJCQkAAwkJCQADCQkJAAYJCQkABQkJCAADCQkJAAQJCQgABAkJCAAECAgIAAMICAgAAgYFAgACBQQEAAIEAwMAAgQDAwACBAMDAAIEAwIAAgQDAgACBAMCAAIEAwIAAgQDAgACBAMCAAIEAwIAAgQCAgADAgEBAAACAQECAAICAgACAgECAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgECAAICAQIAAQEBAgABAQIAAAEBAQAAAQEBAAABAQEAAAABAAAAAAEBAQAAAQEBAAABAQEAAAABAQEAAAABAQAAAQAAAAEBAQAAAQEBAAABAQEAAAABAQEAAAABAQAAAQAAAAEBAQAAAQEBAAABAQAAAQAAAAEBAQAAAQEBAAABAQEAAAABAQEAAAABAQAAAQAAAAEAAQAA" preload="auto"></audio>
+    <div class="max-w-screen-xl mx-auto">
+        <header class="text-center mb-12 animate-fade-in-up">
+            <h1 class="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400" style="background-size: 200% 200%; animation: animated-gradient-text 5s ease infinite;">
+                Monica
+            </h1>
+            <p class="text-xl text-gray-400 mt-2">Project Documentation Hub</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <nav id="docs-nav" class="lg:col-span-1 glass-pane rounded-xl p-6 self-start animate-fade-in-up" style="animation-delay: 0.2s;">
+                <h2 class="text-lg font-semibold mb-4 text-white">Documentation Index</h2>
+                <ul class="space-y-2">
+                    <li><a href="./README.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Project Overview</a></li>
+                    <li><a href="./architecture.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Architecture Guide</a></li>
+                    <li><a href="./development_cycle.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Development Cycle</a></li>
+                    <li><a href="./state_management.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">State Management</a></li>
+                    <li><a href="./services.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Services & API</a></li>
+                    <li><a href="./components.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Component Library</a></li>
+                    <li><a href="./styling_guide.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Styling Guide</a></li>
+                    <li><a href="./database_migration_plan.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Database Migration</a></li>
+                    <li><a href="./future_features_with_backend.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Future Vision</a></li>
+                </ul>
+            </nav>
+            <main id="docs-content" class="lg:col-span-3 glass-pane rounded-xl p-8 animate-fade-in-up" style="animation-delay: 0.4s;">
+                <div class="prose prose-docs max-w-none">
+                    <h2 class="!text-3xl !text-cyan-400">Welcome to the Monica Documentation</h2>
+                    <p class="text-lg text-gray-400">This documentation provides a comprehensive guide for developers—both human and AI—to understand, contribute to, and extend the Monica project.</p>
+                    
+                    <hr/>
+                    
+                    <h3>Project Overview & Goals</h3>
+                    <p>Monica is an advanced, client-side AI assistant designed for complex, multi-agent conversations. It provides a flexible platform where users can configure and interact with a team of specialized AI agents within a single, coherent chat interface. The primary goal is to create a transparent, powerful, and user-friendly environment for exploring sophisticated AI interactions that go beyond simple question-and-answer formats.</p>
+                    
+                    <h3 class="!mt-8">The Development Lifecycle</h3>
+                    <p>Our development process is structured to ensure clarity, quality, and traceability from conception to deployment. It is designed to be followed by both human and AI developers.</p>
+                    <ol>
+                        <li><strong>Phase 1: Idea & Feature Definition</strong><br>A new feature is formally defined in a text file, outlining its objectives and core functionality. This file becomes the single source of truth and is placed in the <code>Monica-Documentation/features/Remaining/</code> directory.</li>
+                        <li><strong>Phase 2: Planning</strong><br>Before coding, a detailed implementation plan is created. This includes identifying all new and modified files, defining function signatures, and outlining the UI/UX strategy. This ensures architectural soundness.</li>
+                        <li><strong>Phase 3: Implementation</strong><br>The developer (human or AI) writes the code according to the plan, adhering to the project's coding standards.</li>
+                        <li><strong>Phase 4: Testing</strong><br>A comprehensive QA test plan is generated and stored in <code>Monica-Documentation/testing/</code>. This includes static analysis, risk assessment, unit/integration test scenarios (in Gherkin syntax), and a manual end-to-end test plan. The feature is rigorously tested against this plan.</li>
+                        <li><strong>Phase 5: Completion & Documentation</strong><br>Once tested, the feature's definition file is moved to <code>Monica-Documentation/features/Completed/</code>. All relevant documentation is updated.</li>
+                        <li><strong>Phase 6: Production</strong><br>The feature is merged into the main branch and deployed.</li>
+                    </ol>
+
+                    <h3 class="!mt-8">My Suggestions for the Project</h3>
+                    <p>As an AI assistant with deep expertise in frontend engineering, I have the following suggestions to further enhance Monica:</p>
+                    <ul>
+                        <li><strong>Formal Testing Framework:</strong> While the QA reports are excellent, integrating a formal testing library like Vitest or React Testing Library would allow for the automation of the unit and integration test scenarios, leading to a more robust and bug-resistant codebase.</li>
+                        <li><strong>State Management Optimization:</strong> For an application of this complexity, migrating from a pure Context API approach to a more optimized state management library like Zustand could improve performance and simplify state logic, especially as more real-time features are added.</li>
+                        <li><strong>Component Storybook:</strong> Implementing Storybook would create an isolated environment for developing and documenting UI components. This is invaluable for both human and AI developers to understand the available building blocks of the application.</li>
+                        <li><strong>Backend Integration:</strong> The most significant evolution for Monica would be the introduction of a backend, as outlined in the "Future Vision" document. This would unlock multi-device sync, collaboration, and a host of powerful server-side features, transforming Monica from a sophisticated tool into a true platform.</li>
+                    </ul>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('click-sound');
+            document.querySelectorAll('a, button').forEach(el => {
+                el.addEventListener('click', () => {
+                    if (audio && audio.play) {
+                        audio.currentTime = 0;
+                        audio.play().catch(e => {}); // Autoplay might be blocked, fail silently
+                    }
+                });
+            });
+             const navLinks = document.querySelectorAll('.nav-link');
+             const setActiveLink = (link) => {
+                if (!link) return;
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            };
+            const currentPath = window.location.pathname.split('/').pop();
+            const activeLink = document.querySelector(`.nav-link[href$="${currentPath}"]`);
+            setActiveLink(activeLink || document.querySelector('.nav-link'));
+        });
+    </script>
+</body>
+</html>

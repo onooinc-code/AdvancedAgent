@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monica - Database Migration Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --font-sans: 'Inter', sans-serif; --font-mono: 'Roboto Mono', monospace; --color-bg: #0a0a0f; --color-pane: rgba(23, 26, 43, 0.5); --color-border: rgba(129, 140, 248, 0.2); --color-neon-indigo: rgba(129, 140, 248, 1); --color-neon-cyan: rgba(34, 211, 238, 1); }
+        body { font-family: var(--font-sans); background-color: var(--color-bg); color: #d1d5db; }
+        .glass-pane { background-color: var(--color-pane); backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%); border: 1px solid var(--color-border); }
+        .neon-glow-indigo { box-shadow: 0 0 5px rgba(129, 140, 248, 0.6), 0 0 10px rgba(129, 140, 248, 0.4); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        @keyframes animated-gradient-text { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(129, 140, 248, 0.4); border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: rgba(129, 140, 248, 0.6); }
+        .prose-docs { --tw-prose-body: #d1d5db; --tw-prose-headings: #ffffff; --tw-prose-lead: #a5b4fc; --tw-prose-links: #c7d2fe; --tw-prose-bold: #ffffff; --tw-prose-counters: #a5b4fc; --tw-prose-bullets: #a5b4fc; --tw-prose-hr: rgba(255, 255, 255, 0.2); --tw-prose-quotes: #e5e7eb; --tw-prose-quote-borders: #a5b4fc; --tw-prose-captions: #9ca3af; --tw-prose-code: #c7d2fe; --tw-prose-pre-code: #c7d2fe; --tw-prose-pre-bg: rgba(0, 0, 0, 0.3); }
+        .nav-link.active { background-color: rgba(129, 140, 248, 0.3); border-left-color: var(--color-neon-indigo); color: #fff; box-shadow: 0 0 8px rgba(129, 140, 248, 0.5); }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <audio id="click-sound" src="data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU9vT19PAAAAAAACAgIAAASEgAABIYAICwgJAgALLgUIiAECCw8JEgABCIYACAwFCIsABQYHCQoBBAkJCAACCQkIAAMJCQgABQkJCQAHCQkIAAgJCQkACQkJCQAJCQkIAAYJCQkAAwkJCQADCQkJAAYJCQkABQkJCAADCQkJAAQJCQgABAkJCAAECAgIAAMICAgAAgYFAgACBQQEAAIEAwMAAgQDAwACBAMDAAIEAwIAAgQDAgACBAMCAAIEAwIAAgQDAgACBAMCAAIEAwIAAgQCAgADAgEBAAACAQECAAICAgACAgECAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgECAAICAQIAAQEBAgABAQIAAAEBAQAAAQEBAAABAQEAAAABAAAAAAEBAQAAAQEBAAABAQEAAAABAQEAAAABAQEAAAABAQAAAQAAAAEBAQAAAQEBAAABAQEAAAABAQAAAQAAAAEBAQAAAQEBAAABAQAAAQAAAAEBAQAAAQEBAAABAQEAAAABAQEAAAABAQAAAQAAAAEAAQAA" preload="auto"></audio>
+    <div class="max-w-screen-xl mx-auto">
+        <header class="text-center mb-12 animate-fade-in-up">
+            <a href="./index.html" class="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400" style="background-size: 200% 200%; animation: animated-gradient-text 5s ease infinite;">
+                Monica
+            </a>
+            <p class="text-xl text-gray-400 mt-2">Project Documentation</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <nav id="docs-nav" class="lg:col-span-1 glass-pane rounded-xl p-6 self-start animate-fade-in-up" style="animation-delay: 0.2s;">
+                <h2 class="text-lg font-semibold mb-4 text-white">Documentation Index</h2>
+                <ul class="space-y-2">
+                    <li><a href="./README.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Project Overview</a></li>
+                    <li><a href="./architecture.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Architecture Guide</a></li>
+                    <li><a href="./development_cycle.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Development Cycle</a></li>
+                    <li><a href="./state_management.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">State Management</a></li>
+                    <li><a href="./services.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Services & API</a></li>
+                    <li><a href="./components.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Component Library</a></li>
+                    <li><a href="./styling_guide.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Styling Guide</a></li>
+                    <li><a href="./database_migration_plan.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Database Migration</a></li>
+                    <li><a href="./future_features_with_backend.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Future Vision</a></li>
+                </ul>
+            </nav>
+            <main id="docs-content" class="lg:col-span-3 glass-pane rounded-xl p-8 animate-fade-in-up" style="animation-delay: 0.4s;">
+                <div class="prose prose-docs max-w-none">
+                    <h1>Database Migration Plan: from LocalStorage to Cloud-Native</h1>
+
+                    <h2>1. Rationale: Why Migrate from LocalStorage?</h2>
+                    <p>The current <code>localStorage</code> implementation is excellent for rapid prototyping and single-user, single-device usage. However, migrating to a cloud database is essential for a production-grade application for the following reasons:</p>
+                    <ul>
+                        <li><strong>Data Persistence &amp; Multi-Device Sync</strong>: User data is no longer trapped in one browser. A user can log in from any device and access their complete history and configuration.</li>
+                        <li><strong>Scalability</strong>: <code>localStorage</code> is limited to ~5-10MB. Cloud databases have virtually no limit.</li>
+                        <li><strong>Security</strong>: A proper backend with authentication ensures a user can only access their own data.</li>
+                        <li><strong>Server-Side Logic</strong>: Enables powerful features like background processing, caching, and advanced analytics that are impossible on the client-side.</li>
+                        <li><strong>Collaboration</strong>: The foundation for future features like sharing conversations or team-based agent management.</li>
+                    </ul>
+
+                    <hr>
+
+                    <h2>Path A: Google Cloud Firestore</h2>
+                    <p>Firestore is a NoSQL, document-oriented database from Google, part of the Firebase suite. It's known for its ease of use, real-time capabilities, and excellent integration with Firebase Authentication.</p>
+                    <h3>Benefits on Vercel:</h3>
+                    <ul>
+                        <li><strong>Rapid Development</strong>: Very fast to set up and start using.</li>
+                        <li><strong>Real-Time by Default</strong>: Perfect for a chat application; updates are pushed to clients automatically.</li>
+                        <li><strong>Serverless Integration</strong>: Works seamlessly with Vercel Functions (or Google Cloud Functions) for backend logic.</li>
+                        <li><strong>Generous Free Tier</strong>: Ideal for starting projects without initial costs.</li>
+                    </ul>
+                    <h3>Proposed Firestore Data Structure:</h3>
+                    <p>This structure uses collections (like folders) and documents (like files).</p>
+                    <pre><code class="language-json">{
+  "users": {
+    "{userId}": {
+      "profile": {
+        "displayName": "Alex",
+        "email": "alex@example.com",
+        "createdAt": "Timestamp"
+      },
+      "appSettings": {
+        "agents": "[ ...Agent objects... ]",
+        "agentManager": "{ ...AgentManager object... }",
+        "globalApiKey": "...",
+      },
+      "longTermMemory": {
+        "user_profession": "Astrophysicist"
+      },
+      "conversations": {
+        "{conversationId}": {
+          "title": "Brainstorming Session",
+          "createdAt": "Timestamp",
+          "messages": {
+            "{messageId}": {
+              "sender": "user",
+              "text": "Hello, world!",
+              "timestamp": "Timestamp"
+            }
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+
+                    <hr>
+
+                    <h2>Path B: Vercel Postgres</h2>
+                    <p>Vercel Postgres provides a serverless SQL database that integrates seamlessly with the Vercel ecosystem. This path provides strong data integrity and powerful querying capabilities.</p>
+                    <h3>Benefits on Vercel:</h3>
+                    <ul>
+                        <li><strong>First-Party Integration</strong>: A native Vercel product, ensuring seamless integration and performance.</li>
+                        <li><strong>SQL Power</strong>: Leverage the full power of SQL for complex queries and data analysis.</li>
+                        <li><strong>Data Integrity</strong>: A relational structure enforces data consistency, which is excellent for complex applications.</li>
+                        <li><strong>Familiarity</strong>: The relational model is a well-understood standard for many developers.</li>
+                    </ul>
+                    <h3>Proposed Postgres Data Structure:</h3>
+                    <p>This structure uses traditional database tables with relationships. The <code>JSONB</code> type is used for flexible, schemaless data within a structured table.</p>
+                    <pre><code class="language-sql">-- users Table
+CREATE TABLE users (
+  id UUID PRIMARY KEY,
+  email TEXT UNIQUE NOT NULL
+);
+
+-- app_settings Table (One-to-One with users)
+CREATE TABLE app_settings (
+  user_id UUID PRIMARY KEY REFERENCES users(id),
+  agent_manager JSONB,
+  global_api_key TEXT,
+  long_term_memory JSONB DEFAULT '{}'
+);
+
+-- agents Table (Many-to-One with users)
+CREATE TABLE agents (
+  id UUID PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES users(id),
+  config JSONB -- Stores all agent properties
+);
+
+-- conversations Table (Many-to-One with users)
+CREATE TABLE conversations (
+  id UUID PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES users(id),
+  title TEXT,
+  settings JSONB -- Stores featureFlags, etc.
+);
+
+-- messages Table (Many-to-One with conversations)
+CREATE TABLE messages (
+  id UUID PRIMARY KEY,
+  conversation_id UUID NOT NULL REFERENCES conversations(id),
+  sender TEXT NOT NULL,
+  content TEXT,
+  metadata JSONB -- Stores attachments, pipeline, etc.
+);
+</code></pre>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('click-sound');
+            document.querySelectorAll('a, button').forEach(el => {
+                el.addEventListener('click', () => {
+                    if (audio && audio.play) {
+                        audio.currentTime = 0;
+                        audio.play().catch(e => {});
+                    }
+                });
+            });
+            const navLinks = document.querySelectorAll('.nav-link');
+            const setActiveLink = (link) => {
+                if (!link) return;
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            };
+            const currentPath = window.location.pathname.split('/').pop() || 'README.html';
+            const activeLink = document.querySelector(`.nav-link[href$="${currentPath}"]`);
+            setActiveLink(activeLink || document.querySelector('.nav-link'));
+        });
+    </script>
+</body>
+</html>

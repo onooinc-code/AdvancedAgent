@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monica - Architecture Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --font-sans: 'Inter', sans-serif; --font-mono: 'Roboto Mono', monospace; --color-bg: #0a0a0f; --color-pane: rgba(23, 26, 43, 0.5); --color-border: rgba(129, 140, 248, 0.2); --color-neon-indigo: rgba(129, 140, 248, 1); --color-neon-cyan: rgba(34, 211, 238, 1); }
+        body { font-family: var(--font-sans); background-color: var(--color-bg); color: #d1d5db; }
+        .glass-pane { background-color: var(--color-pane); backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%); border: 1px solid var(--color-border); }
+        .neon-glow-indigo { box-shadow: 0 0 5px rgba(129, 140, 248, 0.6), 0 0 10px rgba(129, 140, 248, 0.4); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        @keyframes animated-gradient-text { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(129, 140, 248, 0.4); border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: rgba(129, 140, 248, 0.6); }
+        .prose-docs { --tw-prose-body: #d1d5db; --tw-prose-headings: #ffffff; --tw-prose-lead: #a5b4fc; --tw-prose-links: #c7d2fe; --tw-prose-bold: #ffffff; --tw-prose-counters: #a5b4fc; --tw-prose-bullets: #a5b4fc; --tw-prose-hr: rgba(255, 255, 255, 0.2); --tw-prose-quotes: #e5e7eb; --tw-prose-quote-borders: #a5b4fc; --tw-prose-captions: #9ca3af; --tw-prose-code: #c7d2fe; --tw-prose-pre-code: #c7d2fe; --tw-prose-pre-bg: rgba(0, 0, 0, 0.3); }
+        .nav-link.active { background-color: rgba(129, 140, 248, 0.3); border-left-color: var(--color-neon-indigo); color: #fff; box-shadow: 0 0 8px rgba(129, 140, 248, 0.5); }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <audio id="click-sound" src="data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU9vT19PAAAAAAACAgIAAASEgAABIYAICwgJAgALLgUIiAECCw8JEgABCIYACAwFCIsABQYHCQoBBAkJCAACCQkIAAMJCQgABQkJCQAHCQkIAAgJCQkACQkJCQAJCQkIAAYJCQkAAwkJCQADCQkJAAYJCQkABQkJCAADCQkJAAQJCQgABAkJCAAECAgIAAMICAgAAgYFAgACBQQEAAIEAwMAAgQDAwACBAMDAAIEAwIAAgQDAgACBAMCAAIEAwIAAgQDAgACBAMCAAIEAwIAAgQCAgADAgEBAAACAQECAAICAgACAgECAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgECAAICAQIAAQEBAgABAQIAAAEBAQAAAQEBAAABAQEAAAABAAAAAAEBAQAAAQEBAAABAQEAAAABAQEAAAABAQEAAAABAQAAAQAAAAEBAQAAAQEBAAABAQEAAAABAQAAAQAAAAEBAQAAAQEBAAABAQAAAQAAAAEBAQAAAQEBAAABAQEAAAABAQEAAAABAQAAAQAAAAEAAQAA" preload="auto"></audio>
+    <div class="max-w-screen-xl mx-auto">
+        <header class="text-center mb-12 animate-fade-in-up">
+            <a href="./index.html" class="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400" style="background-size: 200% 200%; animation: animated-gradient-text 5s ease infinite;">
+                Monica
+            </a>
+            <p class="text-xl text-gray-400 mt-2">Project Documentation</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <nav id="docs-nav" class="lg:col-span-1 glass-pane rounded-xl p-6 self-start animate-fade-in-up" style="animation-delay: 0.2s;">
+                <h2 class="text-lg font-semibold mb-4 text-white">Documentation Index</h2>
+                <ul class="space-y-2">
+                    <li><a href="./README.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Project Overview</a></li>
+                    <li><a href="./architecture.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Architecture Guide</a></li>
+                    <li><a href="./development_cycle.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Development Cycle</a></li>
+                    <li><a href="./state_management.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">State Management</a></li>
+                    <li><a href="./services.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Services & API</a></li>
+                    <li><a href="./components.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Component Library</a></li>
+                    <li><a href="./styling_guide.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Styling Guide</a></li>
+                    <li><a href="./database_migration_plan.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Database Migration</a></li>
+                    <li><a href="./future_features_with_backend.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Future Vision</a></li>
+                </ul>
+            </nav>
+            <main id="docs-content" class="lg:col-span-3 glass-pane rounded-xl p-8 animate-fade-in-up" style="animation-delay: 0.4s;">
+                <div class="prose prose-docs max-w-none">
+                    <h1>Architecture Guide</h1>
+                    <p class="lead">Monica follows a feature-oriented architecture designed for scalability, maintainability, and clean separation of concerns.</p>
+
+                    <h2>Project File Structure</h2>
+                    <p>The project is organized into several key directories, each with a distinct responsibility.</p>
+                    <pre><code>/
+├── components/         # Reusable UI components (Modals, Inputs, etc.)
+│   └── icons/          # SVG icon components
+├── constants.ts        # Global constants (default agents, configs)
+├── contexts/           # React context for state management
+│   ├── hooks/          # Custom hooks for logic domains (chat, history, etc.)
+│   └── StateProvider.tsx # Main context provider
+├── hooks/              # General-purpose custom React hooks
+├── services/           # External API interactions (Gemini API)
+│   ├── analysis/       # Services that analyze conversation content
+│   ├── chat/           # Services that manage the chat flow
+│   ├── creation/       # Services for AI-powered generation
+│   ├── gemini/         # Core client for the Gemini API
+│   └── utils/          # Shared utility functions for services
+├── types/              # TypeScript type definitions
+├── App.tsx             # Main application component
+└── index.tsx           # Application entry point
+</code></pre>
+
+                    <h2>Data Flow & Logic Separation</h2>
+                    <p>The application's architecture ensures a unidirectional data flow and clear separation between different layers of logic.</p>
+                    
+                    <ol>
+                        <li>
+                            <strong>UI Layer (<code>/components</code>):</strong> These are "dumb" components responsible for rendering the UI and capturing user input. They receive data and event handlers as props and have minimal internal logic. For example, <code>MessageInput.tsx</code> renders a textarea and buttons, and calls the <code>handleSendMessage</code> function passed down from the context.
+                        </li>
+                        <li>
+                            <strong>State & Orchestration Layer (<code>/contexts</code>):</strong> This is the heart of the application.
+                            <ul>
+                                <li><strong><code>StateProvider.tsx</code></strong> acts as the central orchestrator. It initializes all core application state (using <code>useLocalStorage</code> for persistence) and assembles the various logic domains.</li>
+                                <li><strong>Custom Hooks (<code>/contexts/hooks</code>)</strong> each manage a specific domain of logic. For example, <code>useConversationManager</code> handles creating, deleting, and updating conversations, while <code>useChatHandler</code> contains the complex logic for orchestrating the multi-agent chat flow.</li>
+                                <li>This "hooks-based" architecture keeps related logic colocated and makes the <code>StateProvider</code> a clean assembly point rather than a monolithic file.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Service Layer (<code>/services</code>):</strong> This layer is responsible for all external communication, primarily with the Google Gemini API.
+                            <ul>
+                                <li>Services are stateless functions that receive all necessary data as arguments (e.g., API keys, conversation history).</li>
+                                <li>They are responsible for constructing the correct prompts, making the API calls, handling errors, and returning the processed data.</li>
+                                <li>This decouples the core application logic from the specifics of the Gemini API. If we were to switch to another AI provider, only the service layer would need to be changed.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Type Layer (<code>/types</code>):</strong> Centralized TypeScript interfaces ensure data consistency throughout the application, from the service layer responses to the props passed to UI components.
+                        </li>
+                    </ol>
+                    
+                    <h3>Example Flow: Sending a Message</h3>
+                    <ol>
+                        <li>User types in <code>MessageInput.tsx</code> and clicks "Send".</li>
+                        <li>The component calls <code>handleSendMessage</code>, a function it received from the <code>useAppContext</code> hook.</li>
+                        <li><code>handleSendMessage</code> lives inside the <code>useChatHandler.ts</code> hook. It updates the application state to show the user's message immediately.</li>
+                        <li>Based on the current <code>conversationMode</code>, it calls the appropriate function from the <code>managerService.ts</code> or <code>agentService.ts</code>.</li>
+                        <li>The service function builds a prompt and calls the Gemini API via the <code>gemini/client.ts</code>.</li>
+                        <li>The API response is returned to the service, which processes it.</li>
+                        <li>The service returns the result to <code>useChatHandler</code>.</li>
+                        <li><code>useChatHandler</code> updates the application state with the new AI message, which causes the <code>MessageList.tsx</code> component to re-render and display the response.</li>
+                    </ol>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('click-sound');
+            document.querySelectorAll('a, button').forEach(el => {
+                el.addEventListener('click', () => {
+                    if (audio && audio.play) {
+                        audio.currentTime = 0;
+                        audio.play().catch(e => {});
+                    }
+                });
+            });
+            const navLinks = document.querySelectorAll('.nav-link');
+            const setActiveLink = (link) => {
+                if (!link) return;
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            };
+            const currentPath = window.location.pathname.split('/').pop() || 'README.html';
+            const activeLink = document.querySelector(`.nav-link[href$="${currentPath}"]`);
+            setActiveLink(activeLink || document.querySelector('.nav-link'));
+        });
+    </script>
+</body>
+</html>

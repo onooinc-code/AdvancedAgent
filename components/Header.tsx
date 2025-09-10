@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect } from 'react';
 import { SettingsIconV2, HistoryIconV2, MenuIcon, EditIcon, CheckIcon, SparklesIcon, ConversationSettingsIcon, UsersIconV2, CloudIcon, BookmarkFilledIcon, PowerIcon } from './Icons.tsx';
 import { useAppContext } from '../contexts/StateProvider.tsx';
@@ -95,7 +94,7 @@ const DashboardHeader: React.FC<{ toggleSidebar: () => void }> = ({ toggleSideba
                         className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400"
                         style={{ backgroundSize: '200% 200%', animation: 'animated-gradient-text 5s ease infinite' }}
                     >
-                        Advanced AI Assistant
+                        Monica
                     </h1>
                 </div>
                 <div className="flex-1 flex items-center justify-center gap-2">

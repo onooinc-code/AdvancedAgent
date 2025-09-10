@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monica - Project Overview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --font-sans: 'Inter', sans-serif; --font-mono: 'Roboto Mono', monospace; --color-bg: #0a0a0f; --color-pane: rgba(23, 26, 43, 0.5); --color-border: rgba(129, 140, 248, 0.2); --color-neon-indigo: rgba(129, 140, 248, 1); --color-neon-cyan: rgba(34, 211, 238, 1); }
+        body { font-family: var(--font-sans); background-color: var(--color-bg); color: #d1d5db; }
+        .glass-pane { background-color: var(--color-pane); backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%); border: 1px solid var(--color-border); }
+        .neon-glow-indigo { box-shadow: 0 0 5px rgba(129, 140, 248, 0.6), 0 0 10px rgba(129, 140, 248, 0.4); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        @keyframes animated-gradient-text { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(129, 140, 248, 0.4); border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: rgba(129, 140, 248, 0.6); }
+        .prose-docs { --tw-prose-body: #d1d5db; --tw-prose-headings: #ffffff; --tw-prose-lead: #a5b4fc; --tw-prose-links: #c7d2fe; --tw-prose-bold: #ffffff; --tw-prose-counters: #a5b4fc; --tw-prose-bullets: #a5b4fc; --tw-prose-hr: rgba(255, 255, 255, 0.2); --tw-prose-quotes: #e5e7eb; --tw-prose-quote-borders: #a5b4fc; --tw-prose-captions: #9ca3af; --tw-prose-code: #c7d2fe; --tw-prose-pre-code: #c7d2fe; --tw-prose-pre-bg: rgba(0, 0, 0, 0.3); }
+        .nav-link.active { background-color: rgba(129, 140, 248, 0.3); border-left-color: var(--color-neon-indigo); color: #fff; box-shadow: 0 0 8px rgba(129, 140, 248, 0.5); }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-6 lg:p-8">
+    <audio id="click-sound" src="data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU9vT19PAAAAAAACAgIAAASEgAABIYAICwgJAgALLgUIiAECCw8JEgABCIYACAwFCIsABQYHCQoBBAkJCAACCQkIAAMJCQgABQkJCQAHCQkIAAgJCQkACQkJCQAJCQkIAAYJCQkAAwkJCQADCQkJAAYJCQkABQkJCAADCQkJAAQJCQgABAkJCAAECAgIAAMICAgAAgYFAgACBQQEAAIEAwMAAgQDAwACBAMDAAIEAwIAAgQDAgACBAMCAAIEAwIAAgQDAgACBAMCAAIEAwIAAgQCAgADAgEBAAACAQECAAICAgACAgECAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgECAAICAQIAAQEBAgABAQIAAAEBAQAAAQEBAAABAQEAAAABAAAAAAEBAQAAAQEBAAABAQEAAAABAQEAAAABAQEAAAABAQAAAQAAAAEBAQAAAQEBAAABAQEAAAABAQAAAQAAAAEBAQAAAQEBAAABAQAAAQAAAAEBAQAAAQEBAAABAQEAAAABAQEAAAABAQAAAQAAAAEAAQAA" preload="auto"></audio>
+    <div class="max-w-screen-xl mx-auto">
+        <header class="text-center mb-12 animate-fade-in-up">
+            <a href="./index.html" class="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400" style="background-size: 200% 200%; animation: animated-gradient-text 5s ease infinite;">
+                Monica
+            </a>
+            <p class="text-xl text-gray-400 mt-2">Project Documentation</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <nav id="docs-nav" class="lg:col-span-1 glass-pane rounded-xl p-6 self-start animate-fade-in-up" style="animation-delay: 0.2s;">
+                <h2 class="text-lg font-semibold mb-4 text-white">Documentation Index</h2>
+                <ul class="space-y-2">
+                    <li><a href="./README.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Project Overview</a></li>
+                    <li><a href="./architecture.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Architecture Guide</a></li>
+                    <li><a href="./development_cycle.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Development Cycle</a></li>
+                    <li><a href="./state_management.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">State Management</a></li>
+                    <li><a href="./services.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Services & API</a></li>
+                    <li><a href="./components.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Component Library</a></li>
+                    <li><a href="./styling_guide.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Styling Guide</a></li>
+                    <li><a href="./database_migration_plan.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Database Migration</a></li>
+                    <li><a href="./future_features_with_backend.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Future Vision</a></li>
+                </ul>
+            </nav>
+            <main id="docs-content" class="lg:col-span-3 glass-pane rounded-xl p-8 animate-fade-in-up" style="animation-delay: 0.4s;">
+                <div class="prose prose-docs max-w-none">
+                    <h1>Project Overview</h1>
+                    <blockquote>
+                        An advanced AI assistant that allows you to chat with multiple AI agents in the same conversation. Manage the dialogue flow with an AI manager or manual suggestions, configure agent behaviors, and view a structured chat history.
+                    </blockquote>
+                    <p>This application serves as a powerful and flexible platform for multi-agent AI conversations. It features a sophisticated architecture that allows for dynamic, AI-driven conversation flows, persistent memory, and deep introspection into the AI's cognitive processes. It is designed for both casual users and developers who need a transparent and configurable AI chat environment.</p>
+
+                    <h2>1. Design Principles</h2>
+                    <ul>
+                        <li><strong>Single Responsibility Principle (SRP)</strong>: Every file, from components to services, is designed to perform a single, atomic function. This enhances testability and reduces complexity.</li>
+                        <li><strong>Clean & Decoupled Architecture</strong>: Logic is separated by its domain (UI, state, services). <code>StateProvider.tsx</code> acts as an orchestrator, assembling decoupled logic from custom hooks (<code>useChatHandler</code>, <code>useConversationManager</code>, etc.) into a cohesive whole.</li>
+                        <li><strong>Type Safety</strong>: The project is written in TypeScript to catch errors during development and improve code quality and maintainability.</li>
+                    </ul>
+
+                    <h2>2. Technology Stack</h2>
+                    <ul>
+                        <li><strong>Frontend</strong>: React, TypeScript, Tailwind CSS</li>
+                        <li><strong>AI Services</strong>: Google Gemini API (<code>@google/genai</code>)</li>
+                        <li><strong>State Management</strong>: React Context with Custom Hooks</li>
+                        <li><strong>Dependencies</strong>: <code>marked</code> (Markdown parsing), <code>dompurify</code> (HTML sanitization), <code>highlight.js</code> (syntax highlighting)</li>
+                    </ul>
+
+                    <h2>3. Getting Started & Configuration</h2>
+                    <p>The application is designed to be run in a web-based development environment that can serve static files and provide environment variables.</p>
+                    <ol>
+                        <li>Ensure the <code>API_KEY</code> environment variable is set in your environment. This is a <strong>required</strong> variable for the application to function.</li>
+                        <li>The environment should serve the main <code>index.html</code> file as the entry point. The application's JavaScript modules will be loaded automatically.</li>
+                    </ol>
+
+                    <h2>4. Future Improvements</h2>
+                    <ul>
+                        <li><strong>Formal Unit & Integration Testing</strong>: Introduce a testing framework like <strong>Vitest</strong> or <strong>React Testing Library</strong>. The test scenarios already defined in our testing reports provide a perfect starting point for writing these tests.</li>
+                        <li><strong>Advanced State Management</strong>: For even larger applications, migrating from <code>useLocalStorage</code> for core state to a dedicated state management library like <strong>Zustand</strong> or <strong>Redux Toolkit</strong> would provide better performance and developer tools.</li>
+                        <li><strong>CI/CD Pipeline</strong>: Implement a Continuous Integration/Continuous Deployment pipeline (e.g., using GitHub Actions) to automatically test and deploy changes.</li>
+                        <li><strong>WebSocket for Real-time Updates</strong>: For multi-user scenarios, integrate WebSockets to synchronize state across clients in real-time.</li>
+                    </ul>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('click-sound');
+            document.querySelectorAll('a, button').forEach(el => {
+                el.addEventListener('click', () => {
+                    if (audio && audio.play) {
+                        audio.currentTime = 0;
+                        audio.play().catch(e => {});
+                    }
+                });
+            });
+            const navLinks = document.querySelectorAll('.nav-link');
+            const setActiveLink = (link) => {
+                if (!link) return;
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            };
+            const currentPath = window.location.pathname.split('/').pop() || 'README.html';
+            const activeLink = document.querySelector(`.nav-link[href$="${currentPath}"]`);
+            setActiveLink(activeLink || document.querySelector('.nav-link'));
+        });
+    </script>
+</body>
+</html>

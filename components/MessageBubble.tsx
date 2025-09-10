@@ -4,8 +4,9 @@ import { Message, Agent, Conversation } from '../types/index.ts';
 import { MANAGER_COLOR } from '../constants.ts';
 import { useAppContext } from '../contexts/StateProvider.tsx';
 import { Avatar } from './Avatar.tsx';
-import { CopyIcon, BookmarkIcon, BookmarkFilledIcon, EditIcon, TrashIcon, RegenerateIcon, RewriteIcon, SummarizeIcon, CodeBracketIcon, SitemapIcon, AlignLeftIcon, AlignRightIcon, ZoomInIcon, ZoomOutIcon, TextDirectionLeftIcon, TextDirectionRightIcon } from './Icons.tsx';
+import { CopyIcon, BookmarkIcon, BookmarkFilledIcon, EditIcon, TrashIcon, RegenerateIcon, RewriteIcon, SummarizeIcon, CodeBracketIcon, SitemapIcon, AlignLeftIcon, AlignRightIcon, ZoomInIcon, ZoomOutIcon, TextDirectionLeftIcon, TextDirectionRightIcon, TokenIcon } from './Icons.tsx';
 import { PlanDisplay } from './PlanDisplay.tsx';
+import * as TokenCounter from '../services/utils/tokenCounter.ts';
 
 declare const marked: any;
 declare const DOMPurify: any;
@@ -48,6 +49,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
     const contentRef = useRef<HTMLDivElement>(null);
     const [editText, setEditText] = useState(message.text);
     const editTextAreaRef = useRef<HTMLTextAreaElement>(null);
+    const tokenCount = TokenCounter.estimateTokens(message);
 
     const activeAlternativeIndex = message.activeAlternativeIndex ?? -1;
     const currentMessageText = activeAlternativeIndex > -1 && message.alternatives?.[activeAlternativeIndex]
@@ -316,8 +318,17 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
                             )}
                         </div>
                         <div className="flex-grow"></div>
-                         <div className={`flex items-center gap-1 ${isUser ? 'text-white' : 'text-gray-400'}`}>
-                             {message.responseTimeMs && <span className="ml-2 font-mono text-xs">{message.responseTimeMs}ms</span>}
+                         <div className={`flex items-center gap-2 ${isUser ? 'text-white' : 'text-gray-400'}`}>
+                            {tokenCount > 0 && (
+                                <span className="font-mono text-xs flex items-center gap-1 opacity-80" title={`Estimated Tokens: ${tokenCount}`}>
+                                    <TokenIcon className="w-3.5 h-3.5" />
+                                    {tokenCount}
+                                </span>
+                            )}
+                            {message.responseTimeMs && <span className="font-mono text-xs opacity-80" title="Response Time">{message.responseTimeMs}ms</span>}
+                            
+                            {(tokenCount > 0 || message.responseTimeMs) && <div className="w-px h-4 bg-white/10 mx-1"></div>}
+
                             <ActionButton onClick={() => handleAlignment('left')} title="Align Left" aria-label="Align message left" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><AlignLeftIcon /></ActionButton>
                             <ActionButton onClick={() => handleAlignment('right')} title="Align Right" aria-label="Align message right" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><AlignRightIcon /></ActionButton>
                             <ActionButton onClick={() => handleTextDirection('ltr')} title="Text LTR" aria-label="Set text direction to left-to-right" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><TextDirectionLeftIcon /></ActionButton>
