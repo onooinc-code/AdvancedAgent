@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { useAppContext } from '../contexts/StateProvider.tsx';
+import { safeRender } from '../services/utils/safeRender.ts';
 
 export const ManualSuggestions: React.FC = () => {
     const { manualSuggestions, agents, handleManualSelection, isLoading } = useAppContext();
@@ -14,14 +14,16 @@ export const ManualSuggestions: React.FC = () => {
                 {manualSuggestions.map(({ agentId, reason }) => {
                     const agent = agents.find(a => a.id === agentId);
                     if (!agent) return null;
+                    const colorClass = typeof agent.color === 'string' ? agent.color : 'bg-gray-500';
+                    const textColorClass = typeof agent.textColor === 'string' ? agent.textColor : 'text-white';
                     return (
                         <button
                             key={agentId}
                             onClick={() => handleManualSelection(agentId)}
-                            title={reason}
-                            className={`px-4 py-2 rounded-lg font-semibold transition-transform transform hover:scale-105 ${agent.color} ${agent.textColor}`}
+                            title={safeRender(reason)}
+                            className={`px-4 py-2 rounded-lg font-semibold transition-transform transform hover:scale-105 ${colorClass} ${textColorClass}`}
                         >
-                            {agent.name}
+                            {safeRender(agent.name)}
                         </button>
                     );
                 })}

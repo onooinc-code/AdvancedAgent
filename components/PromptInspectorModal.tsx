@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { useAppContext } from '../contexts/StateProvider.tsx';
-import { CloseIcon } from './Icons.tsx';
 import { Message } from '../types/index.ts';
+import { CloseIcon } from './Icons.tsx';
+import { safeRender } from '../services/utils/safeRender.ts';
 
 const CodeBlock: React.FC<{ data: any; lang?: string }> = ({ data, lang = 'json' }) => {
     let content;
@@ -45,10 +45,10 @@ export const PromptInspectorModal: React.FC = () => {
                 <div className="flex justify-between items-center p-6 border-b border-white/10 flex-shrink-0">
                     <div>
                          <h2 className="text-2xl font-bold text-white">Prompt & Response Inspector</h2>
-                         <p className="text-sm text-gray-400">For message to <span className="font-semibold text-cyan-300">{agent?.name || 'Agent'}</span></p>
+                         <p className="text-sm text-white">For message to <span className="font-semibold text-cyan-300">{safeRender(agent?.name || 'Agent')}</span></p>
                     </div>
                     <button onClick={closePromptInspectorModal} className="p-1 rounded-full hover:bg-white/10">
-                        <CloseIcon />
+                        <CloseIcon className="w-6 h-6" />
                     </button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6 space-y-6">

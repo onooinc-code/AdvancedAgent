@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,118 +6,110 @@
     <title>Monica - Future Vision</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --font-sans: 'Inter', sans-serif; --font-mono: 'Roboto Mono', monospace; --color-bg: #0a0a0f; --color-pane: rgba(23, 26, 43, 0.5); --color-border: rgba(129, 140, 248, 0.2); --color-neon-indigo: rgba(129, 140, 248, 1); --color-neon-cyan: rgba(34, 211, 238, 1); }
-        body { font-family: var(--font-sans); background-color: var(--color-bg); color: #d1d5db; }
-        .glass-pane { background-color: var(--color-pane); backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%); border: 1px solid var(--color-border); }
-        .neon-glow-indigo { box-shadow: 0 0 5px rgba(129, 140, 248, 0.6), 0 0 10px rgba(129, 140, 248, 0.4); }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
-        @keyframes animated-gradient-text { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(129, 140, 248, 0.4); border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: rgba(129, 140, 248, 0.6); }
-        .prose-docs { --tw-prose-body: #d1d5db; --tw-prose-headings: #ffffff; --tw-prose-lead: #a5b4fc; --tw-prose-links: #c7d2fe; --tw-prose-bold: #ffffff; --tw-prose-counters: #a5b4fc; --tw-prose-bullets: #a5b4fc; --tw-prose-hr: rgba(255, 255, 255, 0.2); --tw-prose-quotes: #e5e7eb; --tw-prose-quote-borders: #a5b4fc; --tw-prose-captions: #9ca3af; --tw-prose-code: #c7d2fe; --tw-prose-pre-code: #c7d2fe; --tw-prose-pre-bg: rgba(0, 0, 0, 0.3); }
-        .nav-link.active { background-color: rgba(129, 140, 248, 0.3); border-left-color: var(--color-neon-indigo); color: #fff; box-shadow: 0 0 8px rgba(129, 140, 248, 0.5); }
-    </style>
+    <link rel="stylesheet" href="./shared.css">
 </head>
-<body class="min-h-screen p-4 sm:p-6 lg:p-8">
-    <audio id="click-sound" src="data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU9vT19PAAAAAAACAgIAAASEgAABIYAICwgJAgALLgUIiAECCw8JEgABCIYACAwFCIsABQYHCQoBBAkJCAACCQkIAAMJCQgABQkJCQAHCQkIAAgJCQkACQkJCQAJCQkIAAYJCQkAAwkJCQADCQkJAAYJCQkABQkJCAADCQkJAAQJCQgABAkJCAAECAgIAAMICAgAAgYFAgACBQQEAAIEAwMAAgQDAwACBAMDAAIEAwIAAgQDAgACBAMCAAIEAwIAAgQDAgACBAMCAAIEAwIAAgQCAgADAgEBAAACAQECAAICAgACAgECAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgICAAICAgACAgECAAICAQIAAQEBAgABAQIAAAEBAQAAAQEBAAABAQEAAAABAAAAAAEBAQAAAQEBAAABAQEAAAABAQEAAAABAQEAAAABAQAAAQAAAAEBAQAAAQEBAAABAQEAAAABAQAAAQAAAAEBAQAAAQEBAAABAQAAAQAAAAEBAQAAAQEBAAABAQEAAAABAQEAAAABAQAAAQAAAAEAAQAA" preload="auto"></audio>
-    <div class="max-w-screen-xl mx-auto">
-        <header class="text-center mb-12 animate-fade-in-up">
-            <a href="./index.html" class="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400" style="background-size: 200% 200%; animation: animated-gradient-text 5s ease infinite;">
-                Monica
-            </a>
-            <p class="text-xl text-gray-400 mt-2">Project Documentation</p>
-        </header>
+<body class="p-4 sm:p-6 lg:p-8">
 
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <nav id="docs-nav" class="lg:col-span-1 glass-pane rounded-xl p-6 self-start animate-fade-in-up" style="animation-delay: 0.2s;">
-                <h2 class="text-lg font-semibold mb-4 text-white">Documentation Index</h2>
-                <ul class="space-y-2">
-                    <li><a href="./README.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Project Overview</a></li>
-                    <li><a href="./architecture.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Architecture Guide</a></li>
-                    <li><a href="./development_cycle.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Development Cycle</a></li>
-                    <li><a href="./state_management.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">State Management</a></li>
-                    <li><a href="./services.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Services & API</a></li>
-                    <li><a href="./components.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Component Library</a></li>
-                    <li><a href="./styling_guide.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Styling Guide</a></li>
-                    <li><a href="./database_migration_plan.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Database Migration</a></li>
-                    <li><a href="./future_features_with_backend.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Future Vision</a></li>
-                </ul>
-            </nav>
-            <main id="docs-content" class="lg:col-span-3 glass-pane rounded-xl p-8 animate-fade-in-up" style="animation-delay: 0.4s;">
-                <div class="prose prose-docs max-w-none">
-                    <h1>Vision: The AI Collaboration Platform</h1>
-                    <p class="lead">This document presents an ambitious vision for evolving Monica from an advanced AI assistant into a professional-grade, collaborative <strong>AI Development & Operations Platform</strong> by leveraging a sophisticated backend architecture.</p>
-
-                    <h2>I. Core Platform & Collaboration</h2>
-                    <ol>
-                        <li><strong>User Accounts & SSO</strong>: Secure user registration and login via email, Google, and GitHub.</li>
-                        <li><strong>Multi-Device Synchronization</strong>: Start a chat on desktop, continue seamlessly on mobile.</li>
-                        <li><strong>Team Workspaces</strong>: Create teams, invite members, and share resources.</li>
-                        <li><strong>Real-time Collaboration Cursors</strong>: See where other team members are typing within a shared prompt input, just like Google Docs.</li>
-                        <li><strong>Live Presence Indicators</strong>: See which team members are currently online and active in a specific conversation.</li>
-                        <li><strong>@Mentions and Notifications</strong>: Mention a team member in a chat to send them a notification.</li>
-                        <li><strong>Shareable Conversations</strong>: Generate a unique, secure link to a conversation.</li>
-                        <li><strong>Conversation Tagging & Folders</strong>: Organize chats with custom tags and nested folders.</li>
-                    </ol>
-
-                    <h2>II. Advanced Agent Intelligence & Memory</h2>
-                    <ol>
-                        <li><strong>Shared Team Memory</strong>: A long-term memory store that is shared and built upon by all members of a team.</li>
-                        <li><strong>Visual Memory Graph Explorer</strong>: An interactive graph visualization showing the connections between different pieces of long-term memory.</li>
-                        <li><strong>Temporal Memory Recall</strong>: Ask an agent, "What was the project name we discussed last Tuesday?"</li>
-                        <li><strong>Agent Forking & Inheritance</strong>: "Fork" an existing agent to create a new version that inherits its parent's instructions.</li>
-                        <li><strong>Agent Tool Use & Function Calling</strong>: Allow agents to use external tools (e.g., search the web, run code, query a database).</li>
-                        <li><strong>Dynamic Knowledge Base Integration</strong>: Allow agents to connect to and query external knowledge bases like Notion or Google Drive in real-time.</li>
-                    </ol>
-
-                    <h2>III. Dynamic Conversation & Workflow Automation</h2>
-                     <ol>
-                        <li><strong>Visual Workflow Builder</strong>: A drag-and-drop UI to create complex, multi-step agent workflows (plans).</li>
-                        <li><strong>Trigger-Based Workflows</strong>: Start an agent workflow automatically based on external events (e.g., a new GitHub commit, a webhook).</li>
-                        <li><strong>Human-in-the-Loop Approval Steps</strong>: A workflow can pause and wait for a human user to approve a step before continuing.</li>
-                        <li><strong>Parallel Step Execution</strong>: For workflows where tasks are not dependent, run multiple agents simultaneously.</li>
-                        <li><strong>Saved Workflow Templates</strong>: Save a complex workflow as a template that can be reused across the team.</li>
-                        <li><strong>Conversation Branching & "What-If" Scenarios</strong>: Duplicate a conversation from a specific message to explore an alternative path.</li>
-                    </ol>
-
-                     <h2>IV. Analytics, Monitoring & Monetization</h2>
-                     <ol>
-                        <li><strong>Granular Cost & Token Analysis Dashboard</strong>: A detailed dashboard showing token usage and estimated cost, filterable by user, team, and agent.</li>
-                        <li><strong>Conversation Quality Scoring</strong>: An AI automatically rates conversations for success and flags those that seem to go poorly for review.</li>
-                        <li><strong>Real-time Debugging Stream</strong>: A "developer mode" that streams the raw inputs and outputs of every pipeline step.</li>
-                        <li><strong>"Agent Marketplace"</strong>: A platform for users to publish, share, and discover highly-specialized agents created by the community.</li>
-                        <li><strong>Subscription Tiers & Feature Gating</strong>: Offer different subscription levels (Free, Pro, Enterprise) with different feature access.</li>
-                        <li><strong>Headless API Access</strong>: Allow Pro users to interact with their agents programmatically via a public API.</li>
-                    </ol>
-                </div>
-            </main>
+    <header class="docs-header max-w-screen-xl mx-auto glass-pane rounded-xl p-3 px-4 flex justify-between items-center">
+        <h1 class="header-title text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400">
+            <a href="./index.html">Monica Docs</a>
+        </h1>
+        <div class="header-buttons flex items-center gap-1">
+            <button id="zoom-out-btn" title="Zoom Out" class="p-2 rounded-lg hover:bg-white/10 transition-colors"><i data-lucide="zoom-out"></i></button>
+            <button id="zoom-in-btn" title="Zoom In" class="p-2 rounded-lg hover:bg-white/10 transition-colors"><i data-lucide="zoom-in"></i></button>
+            <button id="text-dec-btn" title="Decrease Text Size" class="p-2 rounded-lg hover:bg-white/10 transition-colors"><i data-lucide="minus"></i></button>
+            <button id="text-inc-btn" title="Increase Text Size" class="p-2 rounded-lg hover:bg-white/10 transition-colors"><i data-lucide="plus"></i></button>
+            <button id="scroll-top-btn" title="Scroll to Top" class="p-2 rounded-lg hover:bg-white/10 transition-colors"><i data-lucide="arrow-up"></i></button>
+            <button id="scroll-bottom-btn" title="Scroll to Bottom" class="p-2 rounded-lg hover:bg-white/10 transition-colors"><i data-lucide="arrow-down"></i></button>
+            <button id="nav-toggle-btn" title="Navigation" class="p-2 rounded-lg hover:bg-white/10 transition-colors"><i data-lucide="menu"></i></button>
         </div>
+    </header>
+
+    <main class="docs-main max-w-screen-xl mx-auto glass-pane rounded-xl p-8 animate-fade-in-up" style="animation-delay: 0.2s;">
+        <div class="prose prose-docs max-w-none">
+            <h1>Future Vision: The AI Collaboration Platform</h1>
+            <p class="lead">This document presents an ambitious vision for evolving Monica from an advanced AI assistant into a professional-grade, collaborative AI Development & Operations Platform by leveraging a sophisticated, hybrid backend architecture.</p>
+
+            <h3>The Hybrid Architecture Philosophy</h3>
+            <ul>
+                <li><strong>Vercel Postgres:</strong> The single source of truth for core, structured data (users, teams, conversations, agents).</li>
+                <li><strong>Firebase Realtime Database:</strong> Used exclusively for ephemeral, high-frequency, real-time events like collaboration cursors and presence indicators.</li>
+                <li><strong>Firebase Authentication:</strong> The industry standard for secure, easy-to-implement user authentication.</li>
+            </ul>
+
+            <hr>
+
+            <h3>I. Core Platform & Collaboration (15+ Features)</h3>
+            <p>Features focused on building a robust, multi-user platform.</p>
+            <ul>
+                <li>User Accounts & SSO</li>
+                <li>Multi-Device Synchronization</li>
+                <li>Team Workspaces & RBAC</li>
+                <li>Real-time Collaboration & Presence</li>
+                <li>Shareable Conversations & Tagging</li>
+                <li>Full Version History & Audit Logs</li>
+            </ul>
+
+            <h3>II. Advanced Agent Intelligence & Memory (10+ Features)</h3>
+            <p>Features that enhance the intelligence and capabilities of the AI agents.</p>
+            <ul>
+                <li>Shared Team Memory & Visual Memory Graph Explorer</li>
+                <li>Agent Tool Use & Function Calling</li>
+                <li>Secure Credential Management for Agents</li>
+                <li>Dynamic Knowledge Base Integration (Notion, Google Drive)</li>
+                <li>Agent Self-Improvement Loops</li>
+            </ul>
+            
+            <h3>III. Dynamic Conversation & Workflow Automation (10+ Features)</h3>
+            <p>Features that allow users to automate complex tasks using AI workflows.</p>
+            <ul>
+                <li>Visual Drag-and-Drop Workflow Builder</li>
+                <li>Trigger-Based Workflows (e.g., from webhooks)</li>
+                <li>Human-in-the-Loop Approval Steps</li>
+                <li>Parallel Step Execution</li>
+                <li>Saved Workflow Templates</li>
+            </ul>
+            
+            <h3>IV. Analytics, Monitoring & Monetization (15+ Features)</h3>
+            <p>Features for monitoring, analyzing, and monetizing the platform.</p>
+            <ul>
+                <li>Granular Cost & Token Analysis Dashboard</li>
+                <li>Conversation Quality Scoring & Anomaly Detection</li>
+                <li>"Agent Marketplace" for community-created agents</li>
+                <li>Subscription Tiers & Feature Gating</li>
+                <li>Headless API Access for Pro Users</li>
+            </ul>
+        </div>
+    </main>
+    
+    <div id="nav-modal-overlay"></div>
+    <div id="nav-modal" class="w-full max-w-md glass-pane rounded-xl">
+        <div class="p-4 border-b border-white/10 flex justify-between items-center">
+            <h2 class="text-lg font-semibold text-white">Navigation</h2>
+            <button id="nav-modal-close-btn" title="Close" class="p-2 rounded-lg hover:bg-white/10 transition-colors"><i data-lucide="x"></i></button>
+        </div>
+        <nav class="p-4">
+             <ul class="space-y-2">
+                <li><a href="./index.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Home</a></li>
+                <li><a href="./README.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Project Overview</a></li>
+                <li><a href="./architecture.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Architecture Guide</a></li>
+                <li><a href="./development_cycle.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Development Cycle</a></li>
+                <li><a href="./state_management.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">State Management</a></li>
+                <li><a href="./services.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Services & API</a></li>
+                <li><a href="./components.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Component Library</a></li>
+                <li><a href="./styling_guide.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Styling Guide</a></li>
+                <li><a href="./database_migration_plan.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Database Migration</a></li>
+                <li><a href="./future_features_with_backend.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">Future Vision</a></li>
+                <li><a href="./document_generator.html" class="nav-link block p-3 rounded-lg border-l-4 border-transparent transition-all hover:bg-white/10">AI Doc Generator</a></li>
+            </ul>
+        </nav>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const audio = document.getElementById('click-sound');
-            document.querySelectorAll('a, button').forEach(el => {
-                el.addEventListener('click', () => {
-                    if (audio && audio.play) {
-                        audio.currentTime = 0;
-                        audio.play().catch(e => {});
-                    }
-                });
-            });
-            const navLinks = document.querySelectorAll('.nav-link');
-            const setActiveLink = (link) => {
-                if (!link) return;
-                navLinks.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-            };
-            const currentPath = window.location.pathname.split('/').pop() || 'README.html';
-            const activeLink = document.querySelector(`.nav-link[href$="${currentPath}"]`);
-            setActiveLink(activeLink || document.querySelector('.nav-link'));
-        });
-    </script>
+
+    <script>lucide.createIcons();</script>
+    <script src="./shared.js"></script>
 </body>
 </html>

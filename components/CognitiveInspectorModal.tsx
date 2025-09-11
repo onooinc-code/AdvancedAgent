@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../contexts/StateProvider.tsx';
-import { CloseIcon } from './Icons.tsx';
 import { PipelineStep } from '../types/index.ts';
+import { CloseIcon } from './Icons.tsx';
 
 const CodeBlock: React.FC<{ data: any }> = ({ data }) => {
     let content;
@@ -42,7 +42,7 @@ export const CognitiveInspectorModal: React.FC = () => {
                 <div className="flex justify-between items-center p-6 border-b border-white/10 flex-shrink-0">
                     <h2 className="text-2xl font-bold text-white">Workflow Visualizer</h2>
                     <button onClick={closeInspectorModal} className="p-1 rounded-full hover:bg-white/10">
-                        <CloseIcon />
+                        <CloseIcon className="w-6 h-6" />
                     </button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-8">
@@ -62,8 +62,8 @@ export const CognitiveInspectorModal: React.FC = () => {
                                     <div className="flex justify-between items-center cursor-pointer" onClick={() => toggleStep(index)}>
                                         <h3 className="font-semibold text-lg text-white">{step.stage}</h3>
                                         <div className="flex items-center gap-4">
-                                            {step.durationMs != null && <span className="text-sm text-gray-400 font-mono">{step.durationMs}ms</span>}
-                                            <span className={`transform transition-transform text-2xl text-gray-400 ${openStepIndex === index ? 'rotate-180' : ''}`}>
+                                            {step.durationMs != null && <span className="text-sm text-white font-mono">{step.durationMs}ms</span>}
+                                            <span className={`transform transition-transform text-2xl text-white ${openStepIndex === index ? 'rotate-180' : ''}`}>
                                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                                             </span>
                                         </div>

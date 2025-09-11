@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { useAppContext } from '../contexts/StateProvider.tsx';
-import { CloseIcon, TokenIcon, MessageCountIcon, CpuChipIcon } from './Icons.tsx';
+import { TokenIcon, CpuIcon, CloseIcon, MessageCountIcon } from './Icons.tsx';
+import { safeRender } from '../services/utils/safeRender.ts';
 
 const getTodayDateString = (): string => {
     const today = new Date();
@@ -35,7 +35,7 @@ export const AgentStatsModal: React.FC = () => {
                 <div className="flex justify-between items-center p-6 border-b border-white/10 flex-shrink-0">
                     <h2 className="text-2xl font-bold text-white">Agent Performance Statistics</h2>
                     <button onClick={() => setIsAgentStatsOpen(false)} className="p-1 rounded-full hover:bg-white/10">
-                        <CloseIcon />
+                        <CloseIcon className="w-6 h-6" />
                     </button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6">
@@ -52,14 +52,14 @@ export const AgentStatsModal: React.FC = () => {
                                         <TokenIcon className="w-6 h-6 text-green-400" />
                                         <div>
                                             <p className="font-bold text-lg text-white font-mono">{formatTokens(managerTodayStats.tokens)}</p>
-                                            <p className="text-xs text-gray-400">Tokens Today (Requests)</p>
+                                            <p className="text-xs text-white">Tokens Today (Requests)</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-3 glass-pane p-3 rounded-md">
-                                        <CpuChipIcon className="w-6 h-6 text-cyan-400" />
+                                        <CpuIcon className="w-6 h-6 text-cyan-400" />
                                         <div>
                                             <p className="font-bold text-lg text-white font-mono">{managerStats.totalMessages}</p>
-                                            <p className="text-xs text-gray-400">Total Decisions</p>
+                                            <p className="text-xs text-white">Total Decisions</p>
                                         </div>
                                     </div>
                                 </div>
@@ -75,22 +75,22 @@ export const AgentStatsModal: React.FC = () => {
                                 <div key={agent.id} className={`glass-pane p-4 rounded-lg shadow-md border-t-4 ${agent.color.replace('bg','border')} transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/20`}>
                                     <div className="flex flex-col h-full">
                                         <div className="mb-4">
-                                            <h3 className="text-xl font-bold text-white">{agent.name}</h3>
-                                            <p className={`text-sm opacity-80`}>{agent.job}</p>
+                                            <h3 className="text-xl font-bold text-white">{safeRender(agent.name)}</h3>
+                                            <p className={`text-sm opacity-80`}>{safeRender(agent.job)}</p>
                                         </div>
                                         <div className="space-y-4 mt-auto">
                                             <div className="flex items-center gap-3 glass-pane p-3 rounded-md">
                                                 <TokenIcon className="w-6 h-6 text-green-400" />
                                                 <div>
                                                     <p className="font-bold text-lg text-white font-mono">{formatTokens(todayStats.tokens)}</p>
-                                                    <p className="text-xs text-gray-400">Tokens Today</p>
+                                                    <p className="text-xs text-white">Tokens Today</p>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-3 glass-pane p-3 rounded-md">
                                                 <MessageCountIcon className="w-6 h-6 text-cyan-400" />
                                                 <div>
                                                     <p className="font-bold text-lg text-white font-mono">{stats.totalMessages}</p>
-                                                    <p className="text-xs text-gray-400">Total Messages</p>
+                                                    <p className="text-xs text-white">Total Messages</p>
                                                 </div>
                                             </div>
                                         </div>

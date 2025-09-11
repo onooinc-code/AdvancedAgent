@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { useAppContext } from '../contexts/StateProvider.tsx';
 import { CloseIcon } from './Icons.tsx';
+import { safeRender } from '../services/utils/safeRender.ts';
 
 export const ActionResponseModal: React.FC = () => {
     const { actionModalState, closeActionModal } = useAppContext();
@@ -12,13 +12,13 @@ export const ActionResponseModal: React.FC = () => {
         <div className={`fixed inset-0 flex justify-center items-center z-50 p-4 modal-overlay ${isOpen ? 'open' : ''}`} onClick={closeActionModal}>
             <div className="glass-pane rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col modal-content shadow-indigo-500/20" onClick={e => e.stopPropagation()}>
                 <div className="flex justify-between items-center p-6 border-b border-white/10 flex-shrink-0">
-                    <h2 className="text-xl font-bold text-white">{title}</h2>
+                    <h2 className="text-xl font-bold text-white">{safeRender(title)}</h2>
                     <button onClick={closeActionModal} className="p-1 rounded-full hover:bg-white/10">
-                        <CloseIcon />
+                        <CloseIcon className="w-6 h-6" />
                     </button>
                 </div>
-                <div className="flex-1 overflow-y-auto p-6 text-gray-300 whitespace-pre-wrap">
-                    {content}
+                <div className="flex-1 overflow-y-auto p-6 text-white whitespace-pre-wrap">
+                    {safeRender(content)}
                 </div>
                 {actions && actions.length > 0 && (
                     <div className="p-6 mt-auto border-t border-white/10 flex justify-end gap-3 flex-shrink-0">

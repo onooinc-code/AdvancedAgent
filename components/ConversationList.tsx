@@ -1,8 +1,9 @@
 
 import React, { useState, useMemo } from 'react';
 import { ConversationItem } from './ConversationItem.tsx';
-import { PlusIcon, SearchIcon } from './Icons.tsx';
 import { useAppContext } from '../contexts/StateProvider.tsx';
+import { PlusIcon, SearchIcon } from './Icons.tsx';
+import { safeRender } from '../services/utils/safeRender.ts';
 
 interface ConversationListProps {
     isOpen: boolean;
@@ -25,11 +26,11 @@ export const ConversationList: React.FC<ConversationListProps> = ({ isOpen }) =>
         }
         const lowercasedQuery = searchQuery.toLowerCase();
         return conversations.filter(conv => {
-            const titleMatch = conv.title.toLowerCase().includes(lowercasedQuery);
+            const titleMatch = safeRender(conv.title).toLowerCase().includes(lowercasedQuery);
             if (titleMatch) return true;
 
             const messageMatch = conv.messages.some(msg => 
-                msg.text.toLowerCase().includes(lowercasedQuery)
+                safeRender(msg.text).toLowerCase().includes(lowercasedQuery)
             );
             return messageMatch;
         });
@@ -49,7 +50,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({ isOpen }) =>
                     aria-label="New Chat"
                     title="Create a new conversation"
                 >
-                    <PlusIcon />
+                    <PlusIcon className="w-6 h-6" />
                 </button>
             </div>
             <div className="relative mb-4 flex-shrink-0">
@@ -67,14 +68,13 @@ export const ConversationList: React.FC<ConversationListProps> = ({ isOpen }) =>
             <div className="flex-1 overflow-y-auto -mr-2 pr-2 space-y-1">
                 {filteredConversations.length > 0 ? (
                     filteredConversations.map(conv => (
-                        <div key={conv.id} className="group">
-                           <ConversationItem
-                                conversation={conv}
-                                isActive={conv.id === activeConversationId}
-                                onSelect={handleSelectConversation}
-                                onDelete={handleDeleteConversation}
-                            />
-                        </div>
+                       <ConversationItem
+                            key={conv.id}
+                            conversation={conv}
+                            isActive={conv.id === activeConversationId}
+                            onSelect={handleSelectConversation}
+                            onDelete={handleDeleteConversation}
+                        />
                     ))
                 ) : (
                     <p className="text-sm text-gray-500 text-center mt-4 px-4">

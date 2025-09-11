@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monica - Services & API Layer</title>
+    <title>Monica - AI Doc Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -31,34 +31,21 @@
 
     <main class="docs-main max-w-screen-xl mx-auto glass-pane rounded-xl p-8 animate-fade-in-up" style="animation-delay: 0.2s;">
         <div class="prose prose-docs max-w-none">
-            <h1>Services & API Layer</h1>
-            <p class="lead">The service layer is responsible for all external communication, primarily with the Google Gemini API. These services are stateless, pure functions that handle prompt construction, API calls, and robust error handling.</p>
+            <h1>AI-Powered Documentation Generator</h1>
+            <p class="lead">This document outlines the concept for a future tool that leverages AI to automate and maintain the project's documentation, ensuring it remains accurate and up-to-date as the codebase evolves.</p>
+            
+            <h3>Concept</h3>
+            <p>The Documentation Generator would be an AI agent with access to the entire project's source code. Its primary goal is to read the code, understand its structure and functionality, and then generate human-readable documentation pages like the ones in this site.</p>
 
-            <h3>Core Gemini Client (<code>gemini/client.ts</code>)</h3>
-            <p>A crucial utility that creates and caches Gemini API client instances based on the API key, preventing redundant initializations and improving performance.</p>
-
-            <h3>Chat Services (<code>services/chat/</code>)</h3>
-            <p>Manages the direct flow of conversation.</p>
+            <h3>Key Features</h3>
             <ul>
-                <li><strong><code>agentService.ts</code>:</strong> Generates a response from a single AI agent, handling streaming, knowledge/memory injection, and prompt assembly.</li>
-                <li><strong><code>managerService.ts</code>:</strong> Contains all logic for the AI Agent Manager, including deciding speakers, generating plans, and moderating discussions.</li>
-                <li><strong><code>messageActionsService.ts</code>:</strong> Handles AI-powered actions on existing messages, like summarizing or rewriting.</li>
+                <li><strong>Automated Component Documentation:</strong> The AI would analyze each component in the <code>/components</code> directory, identify its props, and generate a page for the "Component Library" with examples.</li>
+                <li><strong>Service Layer Analysis:</strong> It would parse the functions in the <code>/services</code> directory, explaining their purpose, parameters, and return values for the "Services & API" documentation.</li>
+                <li><strong>Continuous Integration:</strong> The generator could be run as part of a CI/CD pipeline. When a pull request is made, the AI would check if the code changes require documentation updates and could even suggest or generate the necessary changes automatically.</li>
             </ul>
 
-            <h3>Analysis Services (<code>services/analysis/</code>)</h3>
-            <p>Analyzes conversation content to extract metadata or insights.</p>
-             <ul>
-                <li><strong><code>historyService.ts</code>:</strong> Generates content for the History Modal, including summaries and topic lists.</li>
-                <li><strong><code>memoryService.ts</code>:</strong> Extracts key facts from a conversation for the AI's long-term memory.</li>
-                <li><strong><code>titleService.ts</code>:</strong> Generates a concise title for a conversation.</li>
-            </ul>
-
-            <h3>Creation Services (<code>services/creation/</code>)</h3>
-            <p>Uses AI to generate new configuration or content.</p>
-             <ul>
-                <li><strong><code>discussionService.ts</code>:</strong> Generates rules for a moderated discussion based on agent profiles.</li>
-                <li><strong><code>teamGenerationService.ts</code>:</strong> A multi-step service that generates a team of specialized AI agents from a high-level goal.</li>
-            </ul>
+            <h3>Status: Conceptual</h3>
+            <p>This feature is currently in the conceptual phase and represents a future enhancement to streamline the development process further.</p>
         </div>
     </main>
     

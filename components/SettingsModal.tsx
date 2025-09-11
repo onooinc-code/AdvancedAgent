@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Agent, AgentManager } from '../types/index.ts';
-import { CloseIcon, CpuChipIcon } from './Icons.tsx';
 import { useAppContext } from '../contexts/StateProvider.tsx';
 import { ToggleSwitch } from './ToggleSwitch.tsx';
 import { LongTermMemoryData } from '../types/index.ts';
+import { CloseIcon, CpuIcon } from './Icons.tsx';
+import { safeRender } from '../services/utils/safeRender.ts';
 
 export const SettingsModal: React.FC = () => {
     const { 
@@ -82,7 +83,7 @@ export const SettingsModal: React.FC = () => {
                 <div className="flex justify-between items-center p-6 border-b border-white/10">
                     <h2 className="text-2xl font-bold text-white">Settings</h2>
                     <button onClick={() => setIsSettingsOpen(false)} className="p-1 rounded-full hover:bg-white/10">
-                        <CloseIcon />
+                        <CloseIcon className="w-6 h-6" />
                     </button>
                 </div>
 
@@ -92,7 +93,7 @@ export const SettingsModal: React.FC = () => {
                         <h3 className="text-lg font-semibold text-green-400 mb-4">API Key Management</h3>
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-1">Global Fallback API Key</label>
-                            <p className="text-xs text-gray-400 mb-2">This key will be used for any agent that does not have its own specific key assigned below.</p>
+                            <p className="text-xs text-white mb-2">This key will be used for any agent that does not have its own specific key assigned below.</p>
                             <input 
                                 type="password" 
                                 value={localGlobalApiKey} 
@@ -132,16 +133,16 @@ export const SettingsModal: React.FC = () => {
                                 Import Conversations
                             </button>
                         </div>
-                         <p className="text-sm text-gray-400 mt-3">Export all your chats to a JSON file for backup. You can import this file later to restore your conversations.</p>
+                         <p className="text-sm text-white mt-3">Export all your chats to a JSON file for backup. You can import this file later to restore your conversations.</p>
                     </div>
 
                     {/* Long-Term Memory */}
                      <div className="glass-pane p-4 rounded-lg">
                         <div className="flex items-center gap-3 mb-4">
-                            <CpuChipIcon className="w-6 h-6 text-purple-400"/>
+                            <CpuIcon className="w-6 h-6 text-purple-400"/>
                             <h3 className="text-lg font-semibold text-purple-400">Long-Term Memory</h3>
                         </div>
-                        <p className="text-sm text-gray-400 mb-2">This is the persistent memory shared by all agents, stored as a JSON object. Edit with caution.</p>
+                        <p className="text-sm text-white mb-2">This is the persistent memory shared by all agents, stored as a JSON object. Edit with caution.</p>
                         <textarea 
                             value={localMemory}
                             onChange={e => setLocalMemory(e.target.value)}
@@ -162,7 +163,7 @@ export const SettingsModal: React.FC = () => {
                     {/* Agent Manager Settings */}
                     <div className="glass-pane p-4 rounded-lg">
                         <div className="flex items-center gap-3 mb-4">
-                            <CpuChipIcon className="w-6 h-6 text-yellow-400"/>
+                            <CpuIcon className="w-6 h-6 text-yellow-400"/>
                             <h3 className="text-lg font-semibold text-yellow-400">Agent Manager</h3>
                         </div>
                         <div className="grid grid-cols-1 gap-4">
@@ -183,57 +184,60 @@ export const SettingsModal: React.FC = () => {
 
                     {/* Individual Agent Settings */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {localAgents.map(agent => (
-                            <div key={agent.id} className={`glass-pane p-4 rounded-lg border-t-4 ${agent.color.replace('bg','border')}`}>
-                                <h3 className="text-xl font-bold text-white mb-4">{agent.name}</h3>
-                                <div className="space-y-4">
-                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">API Key (Optional)</label>
-                                        <input type="password" value={agent.apiKey || ''} onChange={e => handleAgentChange(agent.id, 'apiKey', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white font-mono text-sm" placeholder="Uses Global API Key"/>
-                                    </div>
-                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Name</label>
-                                        <input type="text" value={agent.name} onChange={e => handleAgentChange(agent.id, 'name', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Job Title</label>
-                                        <input type="text" value={agent.job} onChange={e => handleAgentChange(agent.id, 'job', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white" />
-                                    </div>
-                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Role</label>
-                                        <input type="text" value={agent.role || ''} onChange={e => handleAgentChange(agent.id, 'role', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white" />
-                                    </div>
-                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Goals (one per line)</label>
-                                        <textarea value={agent.goals?.join('\n') || ''} onChange={e => handleAgentChange(agent.id, 'goals', e.target.value.split('\n'))} rows={3} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white font-mono text-sm"></textarea>
-                                    </div>
-                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Specializations (one per line)</label>
-                                        <textarea value={agent.specializations?.join('\n') || ''} onChange={e => handleAgentChange(agent.id, 'specializations', e.target.value.split('\n'))} rows={3} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white font-mono text-sm"></textarea>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Model</label>
-                                        <input type="text" value={agent.model} onChange={e => handleAgentChange(agent.id, 'model', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white" />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">System Instruction</label>
-                                        <textarea value={agent.systemInstruction} onChange={e => handleAgentChange(agent.id, 'systemInstruction', e.target.value)} rows={5} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white font-mono text-sm"></textarea>
-                                    </div>
-                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Knowledge Base</label>
-                                        <textarea value={agent.knowledge || ''} onChange={e => handleAgentChange(agent.id, 'knowledge', e.target.value)} rows={4} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white font-mono text-sm" placeholder="Provide background info or data..."></textarea>
-                                    </div>
-                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Color Class</label>
-                                        <input type="text" value={agent.color} onChange={e => handleAgentChange(agent.id, 'color', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white" placeholder="e.g., bg-blue-500" />
-                                    </div>
-                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-1">Text Color Class</label>
-                                        <input type="text" value={agent.textColor} onChange={e => handleAgentChange(agent.id, 'textColor', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white" placeholder="e.g., text-white" />
+                        {localAgents.map(agent => {
+                            const borderColorClass = typeof agent.color === 'string' ? agent.color.replace('bg','border') : 'border-gray-500';
+                            return (
+                                <div key={agent.id} className={`glass-pane p-4 rounded-lg border-t-4 ${borderColorClass}`}>
+                                    <h3 className="text-xl font-bold text-white mb-4">{safeRender(agent.name)}</h3>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-1">API Key (Optional)</label>
+                                            <input type="password" value={agent.apiKey || ''} onChange={e => handleAgentChange(agent.id, 'apiKey', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white font-mono text-sm" placeholder="Uses Global API Key"/>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-1">Name</label>
+                                            <input type="text" value={safeRender(agent.name)} onChange={e => handleAgentChange(agent.id, 'name', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-1">Job Title</label>
+                                            <input type="text" value={safeRender(agent.job)} onChange={e => handleAgentChange(agent.id, 'job', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-1">Role</label>
+                                            <input type="text" value={safeRender(agent.role || '')} onChange={e => handleAgentChange(agent.id, 'role', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-1">Goals (one per line)</label>
+                                            <textarea value={agent.goals?.map(safeRender).join('\n') || ''} onChange={e => handleAgentChange(agent.id, 'goals', e.target.value.split('\n'))} rows={3} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white font-mono text-sm"></textarea>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-1">Specializations (one per line)</label>
+                                            <textarea value={agent.specializations?.map(safeRender).join('\n') || ''} onChange={e => handleAgentChange(agent.id, 'specializations', e.target.value.split('\n'))} rows={3} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white font-mono text-sm"></textarea>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-1">Model</label>
+                                            <input type="text" value={safeRender(agent.model)} onChange={e => handleAgentChange(agent.id, 'model', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-1">System Instruction</label>
+                                            <textarea value={safeRender(agent.systemInstruction)} onChange={e => handleAgentChange(agent.id, 'systemInstruction', e.target.value)} rows={5} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white font-mono text-sm"></textarea>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-1">Knowledge Base</label>
+                                            <textarea value={safeRender(agent.knowledge || '')} onChange={e => handleAgentChange(agent.id, 'knowledge', e.target.value)} rows={4} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white font-mono text-sm" placeholder="Provide background info or data..."></textarea>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-1">Color Class</label>
+                                            <input type="text" value={safeRender(agent.color)} onChange={e => handleAgentChange(agent.id, 'color', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white" placeholder="e.g., bg-blue-500" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-300 mb-1">Text Color Class</label>
+                                            <input type="text" value={safeRender(agent.textColor)} onChange={e => handleAgentChange(agent.id, 'textColor', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-md p-2 text-white" placeholder="e.g., text-white" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
 

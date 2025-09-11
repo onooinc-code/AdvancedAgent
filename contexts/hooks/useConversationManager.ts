@@ -1,9 +1,9 @@
-
 import { useState, useEffect } from 'react';
 import { useLocalStorage } from '../../hooks/useLocalStorage.ts';
 import { Conversation, AgentManager, Message } from '../../types/index.ts';
 import * as TitleService from '../../services/analysis/titleService.ts';
 import { isConversationArray } from '../../types/utils.ts';
+import { safeRender } from '../../services/utils/safeRender.ts';
 
 export const useConversationManager = () => {
     const [conversations, setConversations] = useLocalStorage<Conversation[]>('conversations', []);
@@ -58,7 +58,30 @@ export const useConversationManager = () => {
     };
     
     const handleUpdateConversation = (conversationId: string, updates: Partial<Conversation>) => {
-        setConversations(prev => prev.map(c => c.id === conversationId ? { ...c, ...updates } : c));
+        const sanitizedUpdates = { ...updates };
+
+        // Sanitize any message content before it enters the state.
+        if (sanitizedUpdates.messages) {
+            sanitizedUpdates.messages = sanitizedUpdates.messages.map(msg => {
+                const sanitizedMsg = { ...msg };
+                if (Object.prototype.hasOwnProperty.call(sanitizedMsg, 'text')) {
+                    sanitizedMsg.text = safeRender(sanitizedMsg.text);
+                }
+                if (sanitizedMsg.alternatives) {
+                    sanitizedMsg.alternatives = sanitizedMsg.alternatives.map(alt => ({
+                        ...alt,
+                        text: safeRender(alt.text)
+                    }));
+                }
+                return sanitizedMsg;
+            });
+        }
+        // Sanitize the title if it's being updated.
+        if (Object.prototype.hasOwnProperty.call(sanitizedUpdates, 'title')) {
+            sanitizedUpdates.title = safeRender(sanitizedUpdates.title);
+        }
+
+        setConversations(prev => prev.map(c => c.id === conversationId ? { ...c, ...sanitizedUpdates } : c));
     };
 
     const handleUpdateConversationTitle = (conversationId: string, title: string) => {
@@ -214,7 +237,7 @@ export const useConversationManager = () => {
             setConversations(prevConversations => prevConversations.map(conv => {
                 if (conv.id !== conversationId) return conv;
                 const updatedMessages = conv.messages.map(msg => 
-                    msg.id === messageId ? { ...msg, text: (msg.text || '') + textChunk } : msg
+                    msg.id === messageId ? { ...msg, text: safeRender(msg.text || '') + textChunk } : msg
                 );
                 return { ...conv, messages: updatedMessages };
             }));
@@ -225,10 +248,15 @@ export const useConversationManager = () => {
 
     const handleFinalizeMessage = (conversationId: string, messageId: string, finalMessageData: Partial<Message>) => {
         try {
+            const sanitizedData = { ...finalMessageData };
+            if (Object.prototype.hasOwnProperty.call(sanitizedData, 'text')) {
+                sanitizedData.text = safeRender(sanitizedData.text);
+            }
+
             setConversations(prevConversations => prevConversations.map(conv => {
                 if (conv.id !== conversationId) return conv;
                 const updatedMessages = conv.messages.map(msg =>
-                    msg.id === messageId ? { ...msg, ...finalMessageData } : msg
+                    msg.id === messageId ? { ...msg, ...sanitizedData } : msg
                 );
                 return { ...conv, messages: updatedMessages };
             }));

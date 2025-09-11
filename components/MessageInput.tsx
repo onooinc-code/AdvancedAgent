@@ -1,9 +1,8 @@
 
 import React, { useState, useRef } from 'react';
 import { Attachment } from '../types/index.ts';
-import { SendIcon, AttachmentIcon, CloseIcon } from './Icons.tsx';
 import { useAppContext } from '../contexts/StateProvider.tsx';
-
+import { SendIcon, AttachmentIcon, CloseIcon } from './Icons.tsx';
 
 interface MessageInputProps {}
 
@@ -106,7 +105,7 @@ export const MessageInput: React.FC<MessageInputProps> = () => {
                     disabled={isLoading}
                     title="Attach an image (max 4MB)"
                 >
-                    <AttachmentIcon />
+                    <AttachmentIcon className="w-6 h-6" />
                 </button>
                 <textarea
                     value={text}

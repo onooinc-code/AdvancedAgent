@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { Message } from '../types/index.ts';
-import { CloseIcon } from './Icons.tsx';
 import { Spinner } from './Spinner.tsx';
 import { useAppContext } from '../contexts/StateProvider.tsx';
+import { CloseIcon } from './Icons.tsx';
+import { safeRender } from '../services/utils/safeRender.ts';
 
 export const HistoryModal: React.FC = () => {
     const { isHistoryOpen, setIsHistoryOpen, historyView, isLoading, getAgent } = useAppContext();
@@ -16,13 +16,14 @@ export const HistoryModal: React.FC = () => {
         if (msg.sender === 'user') {
             nameStyle += ' text-indigo-300';
         } else if (agent) {
-             nameStyle += ` ${agent.textColor.replace('text-', 'text-')} opacity-90`;
+             const textColorClass = typeof agent.textColor === 'string' ? agent.textColor : 'text-gray-300';
+             nameStyle += ` ${textColorClass} opacity-90`;
         }
 
         return (
             <div key={msg.id} className="text-sm">
-                <span className={nameStyle}>{senderName}:</span>
-                <span className="ml-2 whitespace-pre-wrap text-gray-300">{msg.text}</span>
+                <span className={nameStyle}>{safeRender(senderName)}:</span>
+                <span className="ml-2 whitespace-pre-wrap text-gray-300">{safeRender(msg.text)}</span>
             </div>
         );
     };
@@ -33,7 +34,7 @@ export const HistoryModal: React.FC = () => {
                 <div className="flex justify-between items-center p-6 border-b border-white/10 flex-shrink-0">
                     <h2 className="text-2xl font-bold text-white">Conversation History & Summary</h2>
                     <button onClick={() => setIsHistoryOpen(false)} className="p-1 rounded-full hover:bg-white/10">
-                        <CloseIcon />
+                        <CloseIcon className="w-6 h-6" />
                     </button>
                 </div>
                 
@@ -48,7 +49,7 @@ export const HistoryModal: React.FC = () => {
                         {/* Overall Summary */}
                         <div>
                             <h3 className="text-xl font-semibold text-indigo-400 mb-3">Overall Summary</h3>
-                            <p className="text-gray-300 whitespace-pre-wrap prose prose-invert max-w-none">{historyView.overallSummary}</p>
+                            <p className="text-gray-300 whitespace-pre-wrap prose prose-invert max-w-none">{safeRender(historyView.overallSummary)}</p>
                         </div>
 
                         {/* Topics */}
@@ -56,7 +57,7 @@ export const HistoryModal: React.FC = () => {
                             <h3 className="text-xl font-semibold text-indigo-400 mb-3">Topics Discussed</h3>
                             {historyView.topics.length > 0 ? (
                                 <ul className="list-disc list-inside text-gray-300 space-y-2">
-                                    {historyView.topics.map((topic, i) => <li key={i} className="bg-white/5 px-3 py-1 rounded-md">{topic}</li>)}
+                                    {historyView.topics.map((topic, i) => <li key={i} className="bg-white/5 px-3 py-1 rounded-md">{safeRender(topic)}</li>)}
                                 </ul>
                             ) : <p className="text-gray-500">No topics identified.</p>}
                         </div>
@@ -75,9 +76,9 @@ export const HistoryModal: React.FC = () => {
                          {historyView.summarizedMessages.length > 0 && (
                             <div>
                                 <h3 className="text-xl font-semibold text-indigo-400 mb-3">Earlier Conversation</h3>
-                                 <div className="space-y-2 text-gray-400 text-sm border-l-2 border-indigo-500/50 pl-4">
+                                 <div className="space-y-2 text-white text-sm border-l-2 border-indigo-500/50 pl-4">
                                     {historyView.summarizedMessages.map(chunk => (
-                                        <p key={chunk.id} className="italic">...{chunk.summary}...</p>
+                                        <p key={chunk.id} className="italic">...{safeRender(chunk.summary)}...</p>
                                     ))}
                                 </div>
                             </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../contexts/StateProvider.tsx';
 import { CloseIcon, CopyIcon, CheckIcon } from './Icons.tsx';
+import { safeRender } from '../services/utils/safeRender.ts';
 
 export const ApiUsageModal: React.FC = () => {
     const { isApiUsageOpen, setIsApiUsageOpen, globalApiKey, agentManager, agents } = useAppContext();
@@ -32,7 +33,7 @@ export const ApiUsageModal: React.FC = () => {
                 <div className="flex justify-between items-center p-6 border-b border-white/10 flex-shrink-0">
                     <h2 className="text-2xl font-bold text-white">Official API Key Usage</h2>
                     <button onClick={() => setIsApiUsageOpen(false)} className="p-1 rounded-full hover:bg-white/10">
-                        <CloseIcon />
+                        <CloseIcon className="w-6 h-6" />
                     </button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6">
@@ -51,15 +52,15 @@ export const ApiUsageModal: React.FC = () => {
                                 <div key={index} className="glass-pane p-4 rounded-lg">
                                     <div className="flex justify-between items-start">
                                         <div>
-                                            <h3 className="text-lg font-semibold text-green-400">{slot.type}: {slot.name}</h3>
+                                            <h3 className="text-lg font-semibold text-green-400">{slot.type}: {safeRender(slot.name)}</h3>
                                             <div className="flex items-center gap-2">
-                                                <p className="text-sm text-gray-400 font-mono break-all">
+                                                <p className="text-sm text-white font-mono break-all">
                                                     {slot.effectiveKey ? `...${slot.effectiveKey.slice(-8)}` : 'Not Set'}
                                                 </p>
                                                  {slot.effectiveKey && (
                                                     <button 
                                                         onClick={() => handleCopy(slot.effectiveKey!)}
-                                                        className="p-1 rounded-full text-gray-400 hover:bg-white/10 hover:text-white transition-colors"
+                                                        className="p-1 rounded-full text-white hover:bg-white/10 hover:text-cyan-400 transition-colors"
                                                         title="Copy API Key"
                                                     >
                                                         {copiedKey === slot.effectiveKey ? <CheckIcon className="w-4 h-4 text-green-400" /> : <CopyIcon className="w-4 h-4" />}

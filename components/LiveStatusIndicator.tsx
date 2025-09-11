@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { useAppContext } from '../contexts/StateProvider.tsx';
 import { Spinner } from './Spinner.tsx';
+import { safeRender } from '../services/utils/safeRender.ts';
 
 export const LiveStatusIndicator: React.FC = () => {
     const { loadingStage, getAgent } = useAppContext();
@@ -17,7 +17,7 @@ export const LiveStatusIndicator: React.FC = () => {
             break;
         case 'generating':
             const agentNameGen = getAgent(loadingStage.agentId || '')?.name || 'Agent';
-            text = `${agentNameGen} is generating a response...`;
+            text = `${safeRender(agentNameGen)} is generating a response...`;
             break;
         case 'suggesting':
             text = 'Manager is generating suggestions...';
@@ -30,7 +30,7 @@ export const LiveStatusIndicator: React.FC = () => {
             break;
         case 'executing_plan':
             const agentNameExec = getAgent(loadingStage.agentId)?.name || 'Agent';
-            text = `${agentNameExec} is executing: "${loadingStage.task}" (${loadingStage.current}/${loadingStage.total})...`;
+            text = `${safeRender(agentNameExec)} is executing: "${safeRender(loadingStage.task)}" (${loadingStage.current}/${loadingStage.total})...`;
             break;
         default:
             return null;

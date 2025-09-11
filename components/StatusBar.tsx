@@ -1,8 +1,7 @@
-
 import React, { useMemo } from 'react';
 import { useAppContext } from '../contexts/StateProvider.tsx';
 import * as TokenCounter from '../services/utils/tokenCounter.ts';
-import { TokenIcon, MessageCountIcon, ChartBarIcon } from './Icons.tsx';
+import { TokenIcon, StatsIcon, MessageCountIcon } from './Icons.tsx';
 
 const getTodayDateString = (): string => {
     const today = new Date();
@@ -27,15 +26,15 @@ export const StatusBar: React.FC = () => {
     const totalUsage = usageMetrics.totalTokens;
     const totalRequests = usageMetrics.totalRequests;
 
-    const formatStat = (num: number) => {
+    const formatStat = (num: number): string => {
         if (num > 1000) {
             return `${(num / 1000).toFixed(1)}k`;
         }
-        return num;
+        return String(num);
     };
 
     return (
-        <footer className="glass-pane px-4 py-2 flex items-center justify-between text-xs text-gray-400 z-10">
+        <footer className="glass-pane px-4 py-2 flex items-center justify-between text-xs text-white z-10">
             {/* Conversation Stats */}
             <div className="flex items-center gap-4">
                 <span className="font-semibold text-gray-300">Conversation:</span>
@@ -66,7 +65,7 @@ export const StatusBar: React.FC = () => {
                     title="View agent-specific usage statistics"
                     aria-label="View Agent Statistics"
                 >
-                    <ChartBarIcon className="w-4 h-4" />
+                    <StatsIcon className="w-4 h-4" />
                 </button>
             </div>
         </footer>

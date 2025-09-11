@@ -1,5 +1,5 @@
 import React from 'react';
-import { CpuChipIcon } from './Icons.tsx';
+import { CpuIcon, UsersIcon } from './Icons.tsx';
 
 interface AvatarProps {
     name: string;
@@ -11,14 +11,10 @@ export const Avatar: React.FC<AvatarProps> = ({ name, color }) => {
 
     const renderContent = () => {
         if (name === 'You') {
-            return (
-                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                </svg>
-            );
+            return <UsersIcon className="h-6 w-6 text-white" />;
         }
-        if (name === 'Manager Insight') {
-            return <CpuChipIcon className="h-6 w-6 text-yellow-300" />;
+        if (name === 'Manager Insight' || name === 'System') {
+            return <CpuIcon className="h-6 w-6 text-yellow-300" />;
         }
         return initial;
     };

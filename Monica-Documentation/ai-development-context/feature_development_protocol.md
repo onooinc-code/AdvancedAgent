@@ -1,4 +1,3 @@
-
 # Monica Project: AI Feature Development Protocol
 
 **ROLE:** You are an AI developer agent. You must follow this protocol precisely when tasked with implementing a new feature for the Monica project.
@@ -44,18 +43,4 @@ You will be given a feature specification file (e.g., from `Monica-Documentation
 ### **Phase 4: Testing**
 
 1.  **Action:** After your implementation is complete, you must switch roles to a Software Development Engineer in Test (SDET). Analyze the code you just wrote and generate a comprehensive QA report.
-2.  **Output:**
-    -   A new Markdown file in the `Monica-Documentation/testing/` directory (e.g., `15-streaming-responses.md`).
-    -   The content of this file **must** follow the template provided in `Monica-Documentation/prompts/sdet-test-plan-prompt.md`. It must include:
-        1.  **Part 1: Static Analysis & Risk Assessment**
-        2.  **Part 2: Unit & Integration Test Scenarios (Gherkin Syntax)**
-        3.  **Part 3: End-to-End (E2E) Manual Test Plan**
-
----
-
-### **Phase 5 & 6: Completion & Deployment**
-
-1.  **Action:** Once the testing phase is approved, you will perform the final file management tasks.
-2.  **Output:** In your final response for the feature, you will provide an XML block that:
-    -   **Moves** the feature specification file from `Monica-Documentation/features/Remaining/` to `Monica-Documentation/features/Completed/`. (This is done by deleting the old file and creating a new one with the same content at the new path).
-    -   Updates any other documentation files if necessary.
+2

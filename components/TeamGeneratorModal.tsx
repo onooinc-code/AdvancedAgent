@@ -1,9 +1,11 @@
+
 import React, { useState } from 'react';
 import { useAppContext } from '../contexts/StateProvider.tsx';
 import { Agent, TeamComponent } from '../types/index.ts';
-import { CloseIcon, SparklesIcon } from './Icons.tsx';
 import { Spinner } from './Spinner.tsx';
 import * as TeamGenerationService from '../services/creation/teamGenerationService.ts';
+import { CloseIcon, SparklesIcon } from './Icons.tsx';
+import { safeRender } from '../services/utils/safeRender.ts';
 
 type LoadingStage = 'idle' | 'prompt' | 'components' | 'final';
 
@@ -114,7 +116,7 @@ export const TeamGeneratorModal: React.FC = () => {
                 <div className="flex justify-between items-center p-6 border-b border-white/10 flex-shrink-0">
                     <h2 className="text-2xl font-bold text-white">AI-Powered Team Generator</h2>
                     <button onClick={() => setIsTeamGeneratorOpen(false)} className="p-1 rounded-full hover:bg-white/10">
-                        <CloseIcon />
+                        <CloseIcon className="w-6 h-6" />
                     </button>
                 </div>
                 {error && <div className="m-6 bg-red-900/50 border border-red-500/50 text-red-200 px-4 py-2 rounded-md animate-fade-in-up">{error}</div>}
@@ -155,9 +157,9 @@ export const TeamGeneratorModal: React.FC = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         {teamComponents.map((agent, i) => (
                                             <div key={i} className="bg-black/20 p-4 rounded-lg space-y-2 border-l-4 border-cyan-500">
-                                                <h4 className="text-xl font-bold text-white">{agent.name}</h4>
-                                                <p><span className="font-semibold text-gray-400">Job:</span> {agent.jobTitle}</p>
-                                                <p><span className="font-semibold text-gray-400">Role:</span> {agent.role}</p>
+                                                <h4 className="text-xl font-bold text-white">{safeRender(agent.name)}</h4>
+                                                <p><span className="font-semibold text-white">Job:</span> {safeRender(agent.jobTitle)}</p>
+                                                <p><span className="font-semibold text-white">Role:</span> {safeRender(agent.role)}</p>
                                             </div>
                                         ))}
                                     </div>
@@ -181,9 +183,9 @@ export const TeamGeneratorModal: React.FC = () => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 {finalAgents.map(agent => (
                                     <div key={agent.id} className={`glass-pane p-4 rounded-lg shadow-md border-t-4 ${agent.color.replace('bg','border')} space-y-3`}>
-                                        <h4 className="text-xl font-bold text-white">{agent.name}</h4>
-                                        <p><span className="font-semibold opacity-80">Job:</span> {agent.job}</p>
-                                        <p className="text-sm"><span className="font-semibold opacity-80">Instruction:</span> {agent.systemInstruction}</p>
+                                        <h4 className="text-xl font-bold text-white">{safeRender(agent.name)}</h4>
+                                        <p><span className="font-semibold opacity-80">Job:</span> {safeRender(agent.job)}</p>
+                                        <p className="text-sm"><span className="font-semibold opacity-80">Instruction:</span> {safeRender(agent.systemInstruction)}</p>
                                     </div>
                                 ))}
                             </div>

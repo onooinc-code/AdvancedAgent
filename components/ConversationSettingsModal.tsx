@@ -1,10 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../contexts/StateProvider.tsx';
-import { CloseIcon, SparklesIcon, CpuChipIcon } from './Icons.tsx';
 import { ToggleSwitch } from './ToggleSwitch.tsx';
 import { DiscussionSettings, ManagerSettings } from '../types/index.ts';
 import { Spinner } from './Spinner.tsx';
 import * as DiscussionService from '../services/creation/discussionService.ts';
+import { CloseIcon, SparklesIcon, CpuIcon } from './Icons.tsx';
 
 const DEFAULT_DISCUSSION_SETTINGS: DiscussionSettings = {
     enabled: false,
@@ -96,7 +97,7 @@ export const ConversationSettingsModal: React.FC = () => {
                 <div className="flex justify-between items-center p-6 border-b border-white/10">
                     <h2 className="text-2xl font-bold text-white">Conversation Settings</h2>
                     <button onClick={() => setIsConversationSettingsOpen(false)} className="p-1 rounded-full hover:bg-white/10">
-                        <CloseIcon />
+                        <CloseIcon className="w-6 h-6" />
                     </button>
                 </div>
 
@@ -148,7 +149,7 @@ export const ConversationSettingsModal: React.FC = () => {
 
                     <div className="glass-pane p-4 rounded-lg">
                         <label className="block text-sm font-medium text-gray-300 mb-1">System Instruction Override</label>
-                        <p className="text-sm text-gray-400 mb-2">This instruction will override the global agent and manager settings for this conversation only. (Does not apply in Moderated Chat).</p>
+                        <p className="text-sm text-white mb-2">This instruction will override the global agent and manager settings for this conversation only. (Does not apply in Moderated Chat).</p>
                         <textarea 
                             value={systemOverride}
                             onChange={(e) => setSystemOverride(e.target.value)}
@@ -166,7 +167,7 @@ export const ConversationSettingsModal: React.FC = () => {
                             disabled={isLoading || !featureFlags.memoryExtraction}
                             className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-semibold text-white transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:scale-100 bg-purple-600 hover:bg-purple-500 neon-glow-indigo"
                         >
-                            {isLoading ? <Spinner /> : <CpuChipIcon className="w-5 h-5" />}
+                            {isLoading ? <Spinner /> : <CpuIcon className="w-5 h-5" />}
                             <span>Update Memory from this Chat</span>
                         </button>
                          {!featureFlags.memoryExtraction && (

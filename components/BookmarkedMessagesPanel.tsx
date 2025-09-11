@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { useAppContext } from '../contexts/StateProvider.tsx';
 import { Message } from '../types/index.ts';
 import { CloseIcon, BookmarkFilledIcon } from './Icons.tsx';
+import { safeRender } from '../services/utils/safeRender.ts';
 
 interface BookmarkItemProps {
     message: Message;
@@ -13,7 +13,8 @@ const BookmarkItem: React.FC<BookmarkItemProps> = ({ message, onClick }) => {
     const { getAgent } = useAppContext();
     const isUser = message.sender === 'user';
     const sender = isUser ? { name: 'You' } : getAgent(message.sender);
-    const snippet = message.text.substring(0, 100) + (message.text.length > 100 ? '...' : '');
+    const text = safeRender(message.text);
+    const snippet = text.substring(0, 100) + (text.length > 100 ? '...' : '');
 
     return (
         <div 
@@ -22,8 +23,8 @@ const BookmarkItem: React.FC<BookmarkItemProps> = ({ message, onClick }) => {
             role="button"
             title="Go to message"
         >
-            <div className="flex justify-between items-center text-xs text-gray-400 mb-1">
-                <span className="font-semibold">{sender?.name || 'Agent'}</span>
+            <div className="flex justify-between items-center text-xs text-white mb-1">
+                <span className="font-semibold">{safeRender(sender?.name || 'Agent')}</span>
                 <span>{new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
             </div>
             <p className="text-sm text-gray-300 italic">"{snippet}"</p>

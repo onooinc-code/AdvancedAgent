@@ -4,9 +4,15 @@ import { Message, Agent, Conversation } from '../types/index.ts';
 import { MANAGER_COLOR } from '../constants.ts';
 import { useAppContext } from '../contexts/StateProvider.tsx';
 import { Avatar } from './Avatar.tsx';
-import { CopyIcon, BookmarkIcon, BookmarkFilledIcon, EditIcon, TrashIcon, RegenerateIcon, RewriteIcon, SummarizeIcon, CodeBracketIcon, SitemapIcon, AlignLeftIcon, AlignRightIcon, ZoomInIcon, ZoomOutIcon, TextDirectionLeftIcon, TextDirectionRightIcon, TokenIcon } from './Icons.tsx';
+import { 
+    CopyIcon, BookmarkIcon, EditIcon, TrashIcon, RegenerateIcon, SummarizeIcon, RewriteIcon, 
+    CodeIcon, WorkflowIcon, AlignLeftIcon, AlignRightIcon, ZoomInIcon, ZoomOutIcon, 
+    TextLtrIcon, TextRtlIcon, TokenIcon, BookmarkFilledIcon
+} from './Icons.tsx';
+
 import { PlanDisplay } from './PlanDisplay.tsx';
 import * as TokenCounter from '../services/utils/tokenCounter.ts';
+import { safeRender } from '../services/utils/safeRender.ts';
 
 declare const marked: any;
 declare const DOMPurify: any;
@@ -58,7 +64,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
 
     useEffect(() => {
         if (message.isEditing) {
-            setEditText(message.text);
+            setEditText(safeRender(message.text));
             setTimeout(() => {
                 if (editTextAreaRef.current) {
                     editTextAreaRef.current.focus();
@@ -87,25 +93,28 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
     };
 
 
-    const isPotentiallyLong = !isUser && (currentMessageText.split('\n').length > LONG_MESSAGE_LINES || currentMessageText.length > LONG_MESSAGE_CHARS);
+    const isPotentiallyLong = !isUser && (safeRender(currentMessageText).split('\n').length > LONG_MESSAGE_LINES || safeRender(currentMessageText).length > LONG_MESSAGE_CHARS);
     const isLongMessageEnabled = !message.isStreaming && isPotentiallyLong && featureFlags?.autoSummarization;
     const [isExpanded, setIsExpanded] = useState(!isLongMessageEnabled);
     
-    let senderName = 'You';
-    let senderJob = 'User';
+    let _senderName = 'You';
+    let _senderJob = 'User';
     let agentColorIndicator = 'bg-indigo-500';
 
     if (!isUser) {
         if (agent) {
-            senderName = agent.name;
-            senderJob = agent.job;
-            agentColorIndicator = agent.color;
+            _senderName = agent.name;
+            _senderJob = agent.job;
+            agentColorIndicator = typeof agent.color === 'string' ? agent.color : 'bg-gray-500';
         } else if (message.sender === 'system') {
-            senderName = message.messageType === 'insight' ? 'Manager Insight' : 'System';
-            senderJob = 'Manager';
+            _senderName = message.messageType === 'insight' ? 'Manager Insight' : 'System';
+            _senderJob = 'Manager';
             agentColorIndicator = MANAGER_COLOR.bg;
         }
     }
+
+    const senderName = safeRender(_senderName);
+    const senderJob = safeRender(_senderJob);
     
     const handleSaveEdit = () => {
         if (editText.trim()) {
@@ -127,10 +136,10 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
         }
     };
     
-    const handleCopy = () => navigator.clipboard.writeText(currentMessageText);
+    const handleCopy = () => navigator.clipboard.writeText(safeRender(currentMessageText));
 
     const getMessageContent = () => {
-        const textToRender = currentMessageText;
+        const textToRender = safeRender(currentMessageText);
         if (isExpanded) {
             return DOMPurify.sanitize(marked.parse(textToRender));
         }
@@ -156,19 +165,19 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
                 const toolbar = document.createElement('div');
                 toolbar.className = 'code-toolbar glass-pane rounded-t-md px-3 py-1 flex justify-between items-center text-xs';
                 const langSpan = document.createElement('span');
-                langSpan.className = 'text-gray-400 font-mono';
+                langSpan.className = 'text-white font-mono';
                 langSpan.innerText = lang;
                 const buttonsWrapper = document.createElement('div');
                 buttonsWrapper.className = 'flex items-center gap-2';
                 if (lang === 'html') {
                     const viewButton = document.createElement('button');
-                    viewButton.className = 'flex items-center gap-1 text-gray-400 hover:text-white';
+                    viewButton.className = 'flex items-center gap-1 text-white hover:text-cyan-400';
                     viewButton.innerHTML = 'View HTML';
                     viewButton.onclick = () => handleShowHtmlPreview(code?.innerText || '');
                     buttonsWrapper.appendChild(viewButton);
                 }
                 const copyButton = document.createElement('button');
-                copyButton.className = 'flex items-center gap-1 text-gray-400 hover:text-white';
+                copyButton.className = 'flex items-center gap-1 text-white hover:text-cyan-400';
                 copyButton.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg> Copy`;
                 copyButton.onclick = () => navigator.clipboard.writeText(code?.innerText || '');
                 buttonsWrapper.appendChild(copyButton);
@@ -234,12 +243,12 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
                             <div className={`w-3 h-3 rounded-sm ${agentColorIndicator}`}></div>
                             <div className={`mx-3 text-sm font-semibold ${isUser ? 'text-right' : 'text-left'}`}>
                                 <p className="text-white">{senderName}</p>
-                                <p className="text-gray-400 text-xs">{senderJob}</p>
+                                <p className="text-white text-xs">{senderJob}</p>
                             </div>
                         </div>
                          <div className="flex items-center text-xs text-gray-500">
                             {hasAlternatives && (
-                                <div className="flex items-center gap-2 mr-2 text-gray-400">
+                                <div className="flex items-center gap-2 mr-2 text-white">
                                     <button onClick={() => handleChangeAlternativeResponse(message.id, 'prev')} disabled={currentResponseIndex <= -1} className="disabled:opacity-50">&lt;</button>
                                     <span>{currentResponseIndex + 2} / {totalResponses}</span>
                                     <button onClick={() => handleChangeAlternativeResponse(message.id, 'next')} disabled={currentResponseIndex >= totalResponses - 2} className="disabled:opacity-50">&gt;</button>
@@ -285,7 +294,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
                     
                     {/* Footer Toolbar */}
                     <div className={`flex items-center p-2 bg-primary-header/70 ${isUser ? 'flex-row-reverse' : ''}`} style={{backgroundColor: 'var(--color-primary-header)'}}>
-                        <div className={`flex items-center gap-1 ${isUser ? 'text-white' : 'text-gray-400'}`}>
+                        <div className={`flex items-center gap-1 ${isUser ? 'text-white' : 'text-white'}`}>
                            {!isUser && (
                                 <>
                                     <ActionButton onClick={() => handleSummarizeMessage(message.id)} title="Summarize message" aria-label="Summarize message" className="hover:bg-gray-700 hover:text-white">
@@ -308,17 +317,17 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
                             )}
                             {message.pipeline && message.pipeline.length > 0 && !isUser && (
                                  <ActionButton onClick={() => openPromptInspectorModal(message)} title="View full prompt & response" aria-label="Inspect prompt" className="hover:bg-gray-700 hover:text-white">
-                                    <CodeBracketIcon className="w-5 h-5" />
+                                    <CodeIcon className="w-5 h-5" />
                                 </ActionButton>
                             )}
                              {message.pipeline && message.pipeline.length > 0 && !isUser && (
                                  <ActionButton onClick={() => openInspectorModal(message.pipeline!)} title="View Workflow" aria-label="View AI Workflow" className="hover:bg-gray-700 hover:text-white">
-                                    <SitemapIcon className="w-5 h-5" />
+                                    <WorkflowIcon className="w-5 h-5" />
                                 </ActionButton>
                             )}
                         </div>
                         <div className="flex-grow"></div>
-                         <div className={`flex items-center gap-2 ${isUser ? 'text-white' : 'text-gray-400'}`}>
+                         <div className={`flex items-center gap-2 ${isUser ? 'text-white' : 'text-white'}`}>
                             {tokenCount > 0 && (
                                 <span className="font-mono text-xs flex items-center gap-1 opacity-80" title={`Estimated Tokens: ${tokenCount}`}>
                                     <TokenIcon className="w-3.5 h-3.5" />
@@ -329,12 +338,12 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
                             
                             {(tokenCount > 0 || message.responseTimeMs) && <div className="w-px h-4 bg-white/10 mx-1"></div>}
 
-                            <ActionButton onClick={() => handleAlignment('left')} title="Align Left" aria-label="Align message left" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><AlignLeftIcon /></ActionButton>
-                            <ActionButton onClick={() => handleAlignment('right')} title="Align Right" aria-label="Align message right" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><AlignRightIcon /></ActionButton>
-                            <ActionButton onClick={() => handleTextDirection('ltr')} title="Text LTR" aria-label="Set text direction to left-to-right" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><TextDirectionLeftIcon /></ActionButton>
-                            <ActionButton onClick={() => handleTextDirection('rtl')} title="Text RTL" aria-label="Set text direction to right-to-left" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><TextDirectionRightIcon /></ActionButton>
-                            <ActionButton onClick={() => handleFontSize('down')} title="Decrease Font Size" aria-label="Decrease font size" disabled={settings.fontSize <= 0.75} className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><ZoomOutIcon /></ActionButton>
-                            <ActionButton onClick={() => handleFontSize('up')} title="Increase Font Size" aria-label="Increase font size" disabled={settings.fontSize >= 1.5} className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><ZoomInIcon /></ActionButton>
+                            <ActionButton onClick={() => handleAlignment('left')} title="Align Left" aria-label="Align message left" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><AlignLeftIcon className="w-5 h-5"/></ActionButton>
+                            <ActionButton onClick={() => handleAlignment('right')} title="Align Right" aria-label="Align message right" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><AlignRightIcon className="w-5 h-5"/></ActionButton>
+                            <ActionButton onClick={() => handleTextDirection('ltr')} title="Text LTR" aria-label="Set text direction to left-to-right" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><TextLtrIcon className="w-5 h-5"/></ActionButton>
+                            <ActionButton onClick={() => handleTextDirection('rtl')} title="Text RTL" aria-label="Set text direction to right-to-left" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><TextRtlIcon className="w-5 h-5"/></ActionButton>
+                            <ActionButton onClick={() => handleFontSize('down')} title="Decrease Font Size" aria-label="Decrease font size" disabled={settings.fontSize <= 0.75} className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><ZoomOutIcon className="w-5 h-5"/></ActionButton>
+                            <ActionButton onClick={() => handleFontSize('up')} title="Increase Font Size" aria-label="Increase font size" disabled={settings.fontSize >= 1.5} className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}><ZoomInIcon className="w-5 h-5"/></ActionButton>
                             <ActionButton onClick={handleCopy} title="Copy message text" aria-label="Copy message" className={isUser ? "hover:bg-indigo-500" : "hover:bg-gray-700 hover:text-white"}>
                                 <CopyIcon className="w-5 h-5" />
                             </ActionButton>

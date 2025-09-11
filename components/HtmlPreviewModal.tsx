@@ -12,7 +12,7 @@ export const HtmlPreviewModal: React.FC = () => {
                 <div className="flex justify-between items-center p-4 border-b border-white/10 flex-shrink-0">
                     <h2 className="text-xl font-bold text-white">HTML Preview</h2>
                     <button onClick={handleCloseHtmlPreview} className="p-1 rounded-full hover:bg-white/10">
-                        <CloseIcon />
+                        <CloseIcon className="w-6 h-6" />
                     </button>
                 </div>
                 <div className="flex-1 p-1 bg-white rounded-b-lg">

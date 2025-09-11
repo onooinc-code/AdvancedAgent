@@ -1,4 +1,3 @@
-
 # Monica Project: AI Developer Architectural Overview
 
 **ROLE:** You are an AI developer tasked with building features for the Monica project. Understanding this architecture is critical for successful contributions.

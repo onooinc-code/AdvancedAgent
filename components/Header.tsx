@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { SettingsIconV2, HistoryIconV2, MenuIcon, EditIcon, CheckIcon, SparklesIcon, ConversationSettingsIcon, UsersIconV2, CloudIcon, BookmarkFilledIcon, PowerIcon } from './Icons.tsx';
-import { useAppContext } from '../contexts/StateProvider.tsx';
 import { Conversation, Agent } from '../types/index.ts';
+import { useAppContext } from '../contexts/StateProvider.tsx';
 import { Spinner } from './Spinner.tsx';
+import { MenuIcon, EditIcon, CheckIcon, SparklesIcon, SettingsIcon, UsersIcon, CloudIcon, PowerIcon, HistoryIcon, BookmarkIcon, BookmarkFilledIcon } from './Icons.tsx';
+import { safeRender } from '../services/utils/safeRender.ts';
 
 // --- SHARED COMPONENTS ---
 
@@ -38,13 +39,15 @@ const AgentCard: React.FC<{ agent: Agent }> = ({ agent }) => {
 
     const formatStat = (num: number) => {
         if (num > 1000) return `${(num / 1000).toFixed(1)}k`;
-        return num;
+        return String(num);
     };
+
+    const borderColorClass = typeof agent.color === 'string' ? agent.color.replace('bg-', 'border-') : 'border-gray-500';
 
     return (
         <div className="flex-1 min-w-[150px] glass-pane rounded-lg flex flex-col transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/20">
-            <div className={`flex items-center justify-between p-2 border-b-2 ${agent.color.replace('bg-', 'border-')}`}>
-                <h3 className="font-bold text-sm text-white truncate">{agent.name}</h3>
+            <div className={`flex items-center justify-between p-2 border-b-2 ${borderColorClass}`}>
+                <h3 className="font-bold text-sm text-white truncate">{safeRender(agent.name)}</h3>
             </div>
             <div className="flex-1 p-2 flex items-center justify-around text-center">
                 <div className="flex-1 flex flex-col items-center justify-center" title={isEnabled ? 'Click to Disable Agent' : 'Click to Enable Agent'}>
@@ -57,11 +60,11 @@ const AgentCard: React.FC<{ agent: Agent }> = ({ agent }) => {
                 </div>
                 <div className="flex-1 flex flex-col items-center justify-center" title="Tokens used today (estimate)">
                      <p className="font-mono font-bold text-sm text-white">{formatStat(todayStats.tokens)}</p>
-                     <p className="text-xs text-gray-400">Tokens</p>
+                     <p className="text-xs text-white">Tokens</p>
                 </div>
                 <div className="flex-1 flex flex-col items-center justify-center" title="Requests today (estimate)">
-                    <p className="font-mono font-bold text-sm text-white">{todayStats.messages}</p>
-                    <p className="text-xs text-gray-400">Reqs</p>
+                    <p className="font-mono font-bold text-sm text-white">{formatStat(todayStats.messages)}</p>
+                    <p className="text-xs text-white">Reqs</p>
                 </div>
             </div>
         </div>
@@ -84,7 +87,7 @@ const DashboardHeader: React.FC<{ toggleSidebar: () => void }> = ({ toggleSideba
         >
             <div className="w-[30%] flex items-center gap-2">
                 <button onClick={toggleSidebar} className="p-2 rounded-full hover:bg-white/10 transition-colors" aria-label="Toggle Sidebar" title="Toggle conversation list">
-                    <MenuIcon />
+                    <MenuIcon className="w-6 h-6" />
                 </button>
             </div>
 
@@ -104,9 +107,9 @@ const DashboardHeader: React.FC<{ toggleSidebar: () => void }> = ({ toggleSideba
 
             <div className="w-[30%] flex items-end justify-end">
                 <div className="flex items-center gap-1 text-xs">
-                    <HeaderButton onClick={() => setIsTeamGeneratorOpen(true)} title="Generate Team" aria-label="Open Team Generator"><UsersIconV2 className="w-5 h-5"/></HeaderButton>
+                    <HeaderButton onClick={() => setIsTeamGeneratorOpen(true)} title="Generate Team" aria-label="Open Team Generator"><UsersIcon className="w-5 h-5"/></HeaderButton>
                     <HeaderButton onClick={() => setIsApiUsageOpen(true)} title="API Usage" aria-label="Open API Usage"><CloudIcon className="w-5 h-5"/></HeaderButton>
-                    <HeaderButton onClick={() => setIsSettingsOpen(true)} title="Settings" aria-label="Open Settings"><SettingsIconV2 className="w-5 h-5"/></HeaderButton>
+                    <HeaderButton onClick={() => setIsSettingsOpen(true)} title="Settings" aria-label="Open Settings"><SettingsIcon className="w-5 h-5"/></HeaderButton>
                 </div>
             </div>
         </header>
@@ -133,7 +136,7 @@ const ConversationHeader: React.FC<{ toggleSidebar: () => void, conversation: Co
     const [title, setTitle] = useState(conversation.title || '');
 
     useEffect(() => {
-        setTitle(conversation.title);
+        setTitle(conversation.title || '');
         setIsEditingTitle(false);
     }, [conversation]);
 
@@ -159,7 +162,7 @@ const ConversationHeader: React.FC<{ toggleSidebar: () => void, conversation: Co
             {/* Left */}
             <div className="flex items-center gap-2 flex-1 min-w-0">
                 <button onClick={toggleSidebar} className="p-2 rounded-full hover:bg-white/10 transition-colors" aria-label="Toggle Sidebar" title="Toggle conversation list">
-                    <MenuIcon />
+                    <MenuIcon className="w-6 h-6" />
                 </button>
                  <div className="flex items-center gap-2 flex-1 min-w-0">
                     {isEditingTitle ? (
@@ -174,7 +177,7 @@ const ConversationHeader: React.FC<{ toggleSidebar: () => void, conversation: Co
                         />
                     ) : (
                          <div className="flex items-center gap-2">
-                            <h1 className="text-lg font-bold text-white truncate">{conversation.title}</h1>
+                            <h1 className="text-lg font-bold text-white truncate">{safeRender(conversation.title)}</h1>
                             {conversation.discussionSettings?.enabled && (
                                 <span className="bg-purple-500/50 text-purple-200 text-xs font-semibold px-2.5 py-1 rounded-full border border-purple-400/50 flex-shrink-0">Moderated</span>
                             )}
@@ -183,13 +186,13 @@ const ConversationHeader: React.FC<{ toggleSidebar: () => void, conversation: Co
                     
                     {isEditingTitle ? (
                         <button onClick={handleTitleSave} className="p-1.5 rounded-full hover:bg-white/10" aria-label="Save title" title="Save title">
-                            <CheckIcon />
+                            <CheckIcon className="w-5 h-5" />
                         </button>
                     ) : (
                          <div className="flex items-center gap-1">
-                            <button onClick={() => setIsEditingTitle(true)} className="p-1.5 rounded-full hover:bg-white/10" aria-label="Edit title" title="Edit conversation title"> <EditIcon /> </button>
-                            <button onClick={() => handleGenerateTitle(conversation.id)} className="p-1.5 rounded-full hover:bg-white/10 text-yellow-400 hover-glow-indigo" disabled={conversation.isGeneratingTitle} title="Generate title with AI"> {conversation.isGeneratingTitle ? <Spinner/> : <SparklesIcon />} </button>
-                            <button onClick={() => setIsConversationSettingsOpen(true)} className="p-1.5 rounded-full hover:bg-white/10" disabled={!conversation} title="Open conversation settings"> <ConversationSettingsIcon /> </button>
+                            <button onClick={() => setIsEditingTitle(true)} className="p-1.5 rounded-full hover:bg-white/10" aria-label="Edit title" title="Edit conversation title"> <EditIcon className="w-4 h-4" /> </button>
+                            <button onClick={() => handleGenerateTitle(conversation.id)} className="p-1.5 rounded-full hover:bg-white/10 text-yellow-400 hover-glow-indigo" disabled={conversation.isGeneratingTitle} title="Generate title with AI"> {conversation.isGeneratingTitle ? <Spinner/> : <SparklesIcon className="w-5 h-5" />} </button>
+                            <button onClick={() => setIsConversationSettingsOpen(true)} className="p-1.5 rounded-full hover:bg-white/10" disabled={!conversation} title="Open conversation settings"> <SettingsIcon className="w-5 h-5" /> </button>
                         </div>
                     )}
                 </div>
@@ -206,14 +209,14 @@ const ConversationHeader: React.FC<{ toggleSidebar: () => void, conversation: Co
 
             {/* Right */}
             <div className="flex items-center gap-1 text-xs justify-end flex-1">
-                <HeaderButton onClick={() => setIsTeamGeneratorOpen(true)} title="Generate Team" aria-label="Open Team Generator"><UsersIconV2 className="w-5 h-5"/></HeaderButton>
+                <HeaderButton onClick={() => setIsTeamGeneratorOpen(true)} title="Generate Team" aria-label="Open Team Generator"><UsersIcon className="w-5 h-5"/></HeaderButton>
                 <HeaderButton onClick={() => setIsApiUsageOpen(true)} title="API Usage" aria-label="Open API Usage"><CloudIcon className="w-5 h-5"/></HeaderButton>
-                <HeaderButton onClick={() => setIsSettingsOpen(true)} title="Settings" aria-label="Open Settings"><SettingsIconV2 className="w-5 h-5"/></HeaderButton>
+                <HeaderButton onClick={() => setIsSettingsOpen(true)} title="Settings" aria-label="Open Settings"><SettingsIcon className="w-5 h-5"/></HeaderButton>
                 <HeaderButton onClick={() => setIsBookmarksPanelOpen(!isBookmarksPanelOpen)} disabled={!conversation} title="Bookmarks" aria-label="View Bookmarks">
-                    <BookmarkFilledIcon className="w-5 h-5" />
+                    <BookmarkIcon className="w-5 h-5" />
                     {bookmarkedCount > 0 && <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-500 text-xs font-bold ring-2 ring-[#1e293b]">{bookmarkedCount}</span>}
                 </HeaderButton>
-                <HeaderButton onClick={handleShowHistory} disabled={!conversation} title="History" aria-label="View History"><HistoryIconV2 className="w-5 h-5"/></HeaderButton>
+                <HeaderButton onClick={handleShowHistory} disabled={!conversation} title="History" aria-label="View History"><HistoryIcon className="w-5 h-5"/></HeaderButton>
             </div>
         </header>
     );

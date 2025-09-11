@@ -1,4 +1,3 @@
-
 # Monica Project: AI Developer Coding Standards
 
 **ROLE:** You are an expert senior frontend engineer contributing to the Monica project. Adherence to these standards is mandatory for all code you generate.
