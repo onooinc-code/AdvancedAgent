@@ -1,0 +1,24 @@
+
+{
+  "manifest_version": 3,
+  "name": "AI Studio Interactive Bridge",
+  "version": "1.0",
+  "description": "Enables conversation persistence and automation for AI development within Google AI Studio.",
+  "permissions": [
+    "storage",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://aistudio.google.com/app/apps/drive/*"
+      ],
+      "js": [
+        "content_script.js"
+      ]
+    }
+  ]
+}
