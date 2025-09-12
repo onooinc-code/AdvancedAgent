@@ -1,9 +1,9 @@
 
 {
   "manifest_version": 3,
-  "name": "AI Studio Interactive Bridge",
-  "version": "2.0",
-  "description": "Enables conversation persistence and automation for AI development within Google AI Studio.",
+  "name": "Monica AI Interactive Bridge",
+  "version": "2.1",
+  "description": "Enables advanced automation, state persistence, and environmental awareness for AI development within Google AI Studio.",
   "permissions": [
     "storage",
     "scripting",
