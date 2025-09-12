@@ -29,4 +29,4 @@ export const HistoryIconV2 = ({ className = 'w-6 h-6' }: { className?: string })
       <path d="M52 20 C 49,15 41,12 32,12 C 23,12 15,15 12,20" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" strokeOpacity="0.8" fill="none"/>
     </g>
   </svg>
-));
+);

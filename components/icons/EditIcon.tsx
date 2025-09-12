@@ -33,4 +33,4 @@ export const EditIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
         <path d="M29 12 C 29 8, 35 8, 35 12" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.8" fill="none" />
     </g>
   </svg>
-));
+);
