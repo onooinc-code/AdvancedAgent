@@ -1,6 +1,6 @@
 
 (function() {
-    'use a strict';
+    'use strict';
 
     // --- 1. UI & STYLING ---
     function createControlPanel() {
@@ -139,7 +139,7 @@
             for (const mutation of mutations) {
                 for (const node of mutation.addedNodes) {
                     if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('turn') && node.classList.contains('output')) {
-                        const contextRegex = /<!--\s*MONICA_CONTEXT_DATA:\s*({[\s\S]*?})\s*-->/g;
+                        const contextRegex = /<!--\s*MONICA_CONTEXT_DATA:\s*({[\s\S]*?})\s*-->/;
                         const match = contextRegex.exec(node.innerHTML);
                         if (match && match[1]) {
                             try {
@@ -162,8 +162,6 @@
                     const buildErrorPanel = node.querySelector('.fix-errors-container');
                     if (buildErrorPanel) {
                         handleBuildError(buildErrorPanel);
-                        // No need to check for the other error type if this one is found
-                        continue; 
                     }
 
                     // Check for Console Error panel
