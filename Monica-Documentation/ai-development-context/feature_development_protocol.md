@@ -43,4 +43,18 @@ You will be given a feature specification file (e.g., from `Monica-Documentation
 ### **Phase 4: Testing**
 
 1.  **Action:** After your implementation is complete, you must switch roles to a Software Development Engineer in Test (SDET). Analyze the code you just wrote and generate a comprehensive QA report.
-2
+2.  **Output:** Create and provide the content for a new QA report file to be saved in `Monica-Documentation/testing/`. This report must follow the established template, including static analysis, risk assessment, Gherkin test scenarios, and a manual E2E test plan.
+
+---
+
+### **Phase 5: Completion & Documentation**
+
+1.  **Action:** Conclude the feature development.
+2.  **Output:** Announce that the feature is complete and that the corresponding definition and testing files should be moved to their respective "Completed" locations.
+
+---
+
+### **Phase 6: Production**
+
+1.  **Action:** Await the next task.
+2.  **Output:** Signal your readiness for the next feature.

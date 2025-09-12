@@ -3,9 +3,10 @@
   "manifest_version": 3,
   "name": "AI Studio Interactive Bridge",
   "version": "1.0",
-  "description": "A bridge for AI development within Google AI Studio, featuring automation and conversation persistence.",
+  "description": "Enables conversation persistence and automation for AI development within Google AI Studio.",
   "permissions": [
-    "storage"
+    "storage",
+    "scripting"
   ],
   "background": {
     "service_worker": "background.js"

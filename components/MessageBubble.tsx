@@ -53,7 +53,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, agent, fe
     } = useAppContext();
     
     const contentRef = useRef<HTMLDivElement>(null);
-    const [editText, setEditText] = useState(message.text);
+    const [editText, setEditText] = useState(() => safeRender(message.text));
     const editTextAreaRef = useRef<HTMLTextAreaElement>(null);
     const tokenCount = TokenCounter.estimateTokens(message);
 
