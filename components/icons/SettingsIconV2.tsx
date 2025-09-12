@@ -25,4 +25,4 @@ export const SettingsIconV2 = ({ className = 'w-6 h-6' }: { className?: string }
       <path d="M49,25C47.3,23,43.2,19,32,19S16.7,23,15,25" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.8"/>
     </g>
   </svg>
-));
+);

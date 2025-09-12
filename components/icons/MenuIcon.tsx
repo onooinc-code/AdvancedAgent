@@ -37,4 +37,4 @@ export const MenuIcon = ({ className = 'w-6 h-6' }: { className?: string }) => (
       <path d="M12 45 C 20,40 44,40 52,45" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" fill="none" strokeOpacity="0.8" />
     </g>
   </svg>
-));
+);

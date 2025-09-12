@@ -1,52 +1,28 @@
 
 (function() {
-    'use strict';
+    'use a strict';
 
-    // --- 1. CONFIGURATION & STATE ---
-    let isAutomationActive = false;
-    let automationCooldown = false;
-
-    // Load initial automation state from background script
-    chrome.runtime.sendMessage({ type: 'GET_AUTOMATION_STATE' }, (response) => {
-        isAutomationActive = response.isAutomationActive || false;
-        if (document.getElementById('ai-bridge-panel')) {
-            updateAutomationStatus();
-        }
-    });
-
-
-    // --- 2. UI & STYLING ---
+    // --- 1. UI & STYLING ---
     function createControlPanel() {
+        if (document.getElementById('ai-bridge-panel')) return;
         const styles = `
             #ai-bridge-panel {
-                position: fixed; bottom: 20px; left: 20px; z-index: 10001; background-color: rgba(28, 24, 44, 0.9);
-                backdrop-filter: blur(10px); border: 1px solid #3a3252; border-radius: 12px; padding: 15px;
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); color: #e0e0e0; font-family: 'Roboto Mono', monospace;
-                width: 380px; cursor: move; user-select: none; transition: transform 0.3s ease, box-shadow 0.3s ease;
+                position: fixed; bottom: 20px; left: 20px; z-index: 10000; background-color: rgba(20, 20, 30, 0.85);
+                backdrop-filter: blur(10px); border: 1px solid #4a4a6a; border-radius: 10px; padding: 15px;
+                box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4); color: #e0e0e0; font-family: 'Roboto Mono', monospace;
+                width: 320px; cursor: move; user-select: none;
             }
-            #ai-bridge-panel.minimized { transform: translateX(-360px); }
-            #ai-bridge-panel:not(.minimized):hover { box-shadow: 0 8px 40px rgba(164, 80, 232, 0.3); }
-            #ai-bridge-panel h3 { margin: 0 0 15px 0; padding-bottom: 10px; border-bottom: 1px solid #3a3252; font-size: 16px; color: #a450e8; text-align: center; }
+            #ai-bridge-panel h3 { margin: 0 0 15px 0; padding-bottom: 10px; border-bottom: 1px solid #4a4a6a; font-size: 14px; color: #a5b4fc; }
             #ai-bridge-panel .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
             #ai-bridge-panel button {
-                background-color: #a450e8; color: white; border: none; border-radius: 8px; padding: 10px;
-                font-family: 'Cairo', sans-serif; font-size: 14px; cursor: pointer; transition: all 0.2s ease;
-                display: flex; align-items: center; justify-content: center; gap: 8px;
+                background-color: #6366f1; color: white; border: none; border-radius: 5px; padding: 10px;
+                font-size: 12px; cursor: pointer; transition: background-color 0.2s ease;
             }
-            #ai-bridge-panel button:hover { background-color: #8e44ad; box-shadow: 0 0 15px rgba(164, 80, 232, 0.5); }
-            #ai-bridge-log { margin-top: 15px; height: 100px; background-color: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 10px; font-size: 12px; overflow-y: auto; border: 1px solid #3a3252; white-space: pre-wrap; word-wrap: break-word; }
-            .log-success { color: #4caf50; } .log-info { color: #00bcd4; } .log-error { color: #f44336; } .log-command { color: #facc15; } .log-auto { color: #f59e0b; }
-            #ai-bridge-toggle { position: absolute; top: 50%; right: -20px; transform: translateY(-50%); width: 20px; height: 50px; background-color: #a450e8; border-top-right-radius: 8px; border-bottom-right-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; }
-            .automation-toggle { display: flex; align-items: center; justify-between; padding: 10px; background-color: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 15px; }
-            .automation-status { display: flex; align-items: center; gap: 8px; font-weight: bold; }
-            .status-light { width: 12px; height: 12px; border-radius: 50%; background-color: #ef4444; transition: background-color 0.3s; }
-            .status-light.active { background-color: #4ade80; box-shadow: 0 0 8px #4ade80; }
-            .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
-            .switch input { opacity: 0; width: 0; height: 0; }
-            .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #374151; transition: .4s; border-radius: 28px; }
-            .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-            input:checked + .slider { background-color: #8b5cf6; }
-            input:checked + .slider:before { transform: translateX(22px); }
+            #ai-bridge-panel button:hover { background-color: #4f46e5; }
+            #ai-bridge-panel button#clear-context-btn { background-color: #b91c1c; }
+            #ai-bridge-panel button#clear-context-btn:hover { background-color: #991b1b; }
+            #ai-bridge-log { margin-top: 15px; height: 80px; background-color: rgba(0, 0, 0, 0.2); border-radius: 5px; padding: 8px; font-size: 11px; overflow-y: auto; border: 1px solid #4a4a6a; }
+            .log-success { color: #81c784; } .log-info { color: #64b5f6; } .log-error { color: #e57373; }
         `;
         const styleSheet = document.createElement("style");
         styleSheet.innerText = styles;
@@ -55,161 +31,224 @@
         const panel = document.createElement('div');
         panel.id = 'ai-bridge-panel';
         panel.innerHTML = `
-            <h3>AI Interactive Bridge v1.0</h3>
-            <div class="automation-toggle">
-                <div class="automation-status">
-                    <div id="automation-status-light" class="status-light"></div>
-                    <span>Full Automation</span>
-                </div>
-                <label class="switch">
-                    <input type="checkbox" id="automation-checkbox">
-                    <span class="slider"></span>
-                </label>
-            </div>
+            <h3>AI Interactive Bridge</h3>
             <div class="button-grid">
-                 <button id="new-talk-btn">🚀 Start New Talk</button>
+                 <button id="load-context-btn">🚀 Load Last Context</button>
                  <button id="copy-preview-html-btn">📋 Copy Preview HTML</button>
+                 <button id="clear-context-btn">🗑️ Clear Saved Context</button>
             </div>
-            <div id="ai-bridge-log"><div class="log-info">[${new Date().toLocaleTimeString()}] Bridge Extension loaded. Waiting...</div></div>
-            <div id="ai-bridge-toggle">&lt;</div>
+            <div id="ai-bridge-log"><div class="log-info">[${new Date().toLocaleTimeString()}] Bridge Initialized.</div></div>
         `;
         
         document.body.appendChild(panel);
         makeDraggable(panel);
-        updateAutomationStatus();
     }
 
-    function log(message, type = 'info') { /* ... same as before ... */ }
-    function updateAutomationStatus() { /* ... same as before ... */ }
-
-    // --- 3. CORE FUNCTIONALITY & HELPERS ---
-    function getProjectId() { /* ... same as before ... */ }
-    function getPreviewIframe() { /* ... same as before ... */ }
-    function getChatInput() { /* ... same as before ... */ }
-    function getSendButton() { /* ... same as before ... */ }
+    function log(message, type = 'info') {
+        const logEl = document.getElementById('ai-bridge-log');
+        if (logEl) {
+            const time = new Date().toLocaleTimeString();
+            const newLog = document.createElement('div');
+            newLog.className = `log-${type}`;
+            newLog.textContent = `[${time}] ${message}`;
+            logEl.appendChild(newLog);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+    }
+    
+    // --- 2. CORE FUNCTIONALITY & HELPERS ---
+    function getProjectId() { try { return window.location.pathname.split('/drive/')[1].split('/')[0]; } catch (e) { return null; } }
+    function getPreviewIframe() { return document.querySelector('iframe[title="Preview"]'); }
+    function getChatInput() { return document.querySelector('textarea[placeholder*="Make changes"]'); }
+    function getSendButton() { return document.querySelector('button[aria-label="Send"]'); }
 
     function saveConversationContext(data) {
         const projectId = getProjectId();
+        if (!projectId) { log('Could not identify Project ID.', 'error'); return; }
         chrome.runtime.sendMessage({ type: 'SAVE_CONTEXT', data, projectId }, (response) => {
             if (response && response.status === 'success') {
-                log('Conversation context saved.', 'success');
-            } else {
-                log('Failed to save context.', 'error');
-            }
+                log(`Context ${data === null ? 'cleared' : 'saved automatically'}.`, 'success');
+            } else { log('Failed to save context.', 'error'); }
         });
     }
 
-    function loadConversationContext(callback) {
+    function loadConversationContext() {
         const projectId = getProjectId();
+        if (!projectId) { log('Could not identify Project ID.', 'error'); return; }
+
         chrome.runtime.sendMessage({ type: 'LOAD_CONTEXT', projectId }, (response) => {
-            if (response) {
-                callback(response.data);
+            if (response && response.data) {
+                const context = response.data;
+                const input = getChatInput();
+                const sendBtn = getSendButton();
+
+                if (!input || !sendBtn) {
+                    log('Chat input/button not found.', 'error');
+                    return;
+                }
+                
+                const prompt = `This is a new session. Please use the following JSON context to remember our previous state and continue our work.\n\n\`\`\`json\n${JSON.stringify(context, null, 2)}\n\`\`\`\`;
+
+                input.value = prompt;
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                setTimeout(() => sendBtn.click(), 100);
+                log('Context loaded and sent.', 'success');
+            } else {
+                log('No saved context found for this project.', 'info');
+                alert('No saved context found.');
             }
         });
     }
 
-    function parseAndExecuteCommands(html) {
-        // NOTE: executeCommand is removed as we don't need it for now.
-        const contextRegex = /<!--\s*MONICA_CONTEXT_DATA:\s*({[\s\S]*?})\s*-->/g;
-        const match = contextRegex.exec(html);
-        if (match) {
-            try {
-                saveConversationContext(JSON.parse(match[1]));
-            } catch(e) { log(`Failed to parse context data: ${e.message}`, 'error'); }
+    // --- 3. AUTOMATION LOGIC ---
+    function handleBuildError(panel) {
+        const autoFixBtn = panel.querySelector('button.ms-button-borderless');
+        if (autoFixBtn && autoFixBtn.textContent.trim() === 'Auto-fix') {
+            log('Build error detected. Clicking "Auto-fix".', 'info');
+            autoFixBtn.click();
         }
     }
 
-    // --- 4. AUTOMATION & EVENT LISTENERS ---
-    function handleAutoSendError() { /* ... same as before ... */ }
-
-    function handleNewTalk() {
-        loadConversationContext((contextData) => {
-            if (!contextData) {
-                alert('No saved conversation context found for this project.');
-                return;
-            }
+    function handleConsoleError(panel) {
+        const errorMessageNode = panel.querySelector('.error.type + .message');
+        if (errorMessageNode && errorMessageNode.textContent.trim()) {
+            const errorMessage = errorMessageNode.textContent.trim();
+            log(`Console error detected: "${errorMessage.substring(0, 50)}..."`, 'info');
+            
             const input = getChatInput();
             const sendBtn = getSendButton();
-            if (!input || !sendBtn) {
-                alert('Could not find chat input or send button.');
-                return;
+
+            if (input && sendBtn && !sendBtn.disabled) {
+                const prompt = `I've encountered a runtime error in the preview. Please analyze and fix it.\n\nError:\n\`\`\`\n${errorMessage}\n\`\`\``;
+                input.value = prompt;
+                input.dispatchEvent(new Event('input', { bubbles: true })); // Crucial for framework change detection
+                setTimeout(() => {
+                    sendBtn.click();
+                    log('Error sent to AI for analysis.', 'success');
+                }, 200); // Small delay to ensure UI updates
+            } else {
+                log('Could not find chat input or send button is disabled.', 'error');
             }
-            const prompt = `
-[CONVERSATION RE-INITIALIZATION]
-This is a new session. Please use the following context to get up to speed on our previous conversation.
-
---- CUMULATIVE CONTEXT ---
-${contextData.cumulativeContext}
-
---- LAST TURN SUMMARY ---
-${contextData.turnSummary}
-            `;
-            input.value = prompt;
-            sendBtn.click();
-            log('Re-initialization prompt sent.', 'success');
-        });
+        }
     }
 
+    // --- 4. EVENT LISTENERS & INITIALIZATION ---
     function setupListeners() {
+        // Observer to watch for my responses and auto-save context
         const chatObserver = new MutationObserver((mutations) => {
-            mutations.forEach(mutation => {
-                if (mutation.addedNodes.length > 0) {
-                    mutation.addedNodes.forEach(node => {
-                        if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('turn') && node.classList.contains('output')) {
-                             parseAndExecuteCommands(node.innerHTML);
+            for (const mutation of mutations) {
+                for (const node of mutation.addedNodes) {
+                    if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('turn') && node.classList.contains('output')) {
+                        const contextRegex = /<!--\s*MONICA_CONTEXT_DATA:\s*({[\s\S]*?})\s*-->/g;
+                        const match = contextRegex.exec(node.innerHTML);
+                        if (match && match[1]) {
+                            try {
+                                const contextData = JSON.parse(match[1]);
+                                saveConversationContext(contextData);
+                            } catch (e) { log(`Failed to parse context data: ${e.message}`, 'error'); }
                         }
-                    });
+                    }
                 }
-            });
+            }
         });
-        const chatContainer = document.querySelector('ms-autoscroll-container');
-        if (chatContainer) chatObserver.observe(chatContainer, { childList: true, subtree: true });
 
+        // Main observer for error panels
+        const mainObserver = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                for (const node of mutation.addedNodes) {
+                    if (node.nodeType !== Node.ELEMENT_NODE) continue;
+
+                    // Check for Build Error panel
+                    const buildErrorPanel = node.querySelector('.fix-errors-container');
+                    if (buildErrorPanel) {
+                        handleBuildError(buildErrorPanel);
+                        // No need to check for the other error type if this one is found
+                        continue; 
+                    }
+
+                    // Check for Console Error panel
+                    const consoleErrorPanel = node.querySelector('ms-console-status');
+                    if (consoleErrorPanel) {
+                        handleConsoleError(consoleErrorPanel);
+                    }
+                }
+            }
+        });
+
+        const chatContainer = document.querySelector('ms-code-assistant-chat ms-autoscroll-container');
+        if (chatContainer) {
+            chatObserver.observe(chatContainer, { childList: true, subtree: true });
+        } else {
+            log('Chat container not found for context observer.', 'error');
+        }
+
+        // Observe the entire body for error panels
+        mainObserver.observe(document.body, { childList: true, subtree: true });
+
+        // Button listeners
         document.body.addEventListener('click', (e) => {
-            const target = e.target;
-            if (target.id === 'copy-preview-html-btn') {
+            const target = e.target.closest('button');
+            if (!target) return;
+
+            if (target.id === 'load-context-btn') {
+                 loadConversationContext();
+            } else if (target.id === 'copy-preview-html-btn') {
                  const iframe = getPreviewIframe();
                  if (iframe && iframe.contentDocument) {
                      navigator.clipboard.writeText(iframe.contentDocument.documentElement.outerHTML)
                         .then(() => log('Preview HTML copied!', 'success'));
+                 } else {
+                    log('Preview iframe not found.', 'error');
                  }
-            } else if (target.id === 'new-talk-btn') { handleNewTalk(); }
+            } else if (target.id === 'clear-context-btn') { 
+                if (window.confirm('Are you sure you want to clear the saved context for this project?')) {
+                    saveConversationContext(null);
+                }
+            }
         });
-
-        const checkbox = document.getElementById('automation-checkbox');
-        if (checkbox) checkbox.addEventListener('change', (e) => {
-            isAutomationActive = e.target.checked;
-            chrome.runtime.sendMessage({ type: 'SET_AUTOMATION_STATE', isAutomationActive }, () => {
-                updateAutomationStatus();
-                log(`Full Automation ${isAutomationActive ? 'ENABLED' : 'DISABLED'}.`, 'auto');
-            });
-        });
-
-        const toggleButton = document.getElementById('ai-bridge-toggle');
-        if (toggleButton) {
-            toggleButton.onclick = (e) => {
-                e.stopPropagation();
-                const panel = document.getElementById('ai-bridge-panel');
-                panel.classList.toggle('minimized');
-                toggleButton.textContent = panel.classList.contains('minimized') ? '>' : '<';
-            };
-        }
     }
     
-    function startAutomationObserver() { /* ... same as before ... */ }
-    function makeDraggable(element) { /* ... same as before ... */ }
+    function makeDraggable(element) {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        element.onmousedown = dragMouseDown;
 
-    // --- 5. INITIALIZATION ---
+        function dragMouseDown(e) {
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            element.style.top = (element.offsetTop - pos2) + "px";
+            element.style.left = (element.offsetLeft - pos1) + "px";
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+
+    // --- INITIALIZATION ---
     function initialize() {
         if (document.getElementById('ai-bridge-panel')) return;
         const appRoot = document.querySelector('app-root');
-        if (!appRoot) { setTimeout(initialize, 500); return; }
+        if (!appRoot) {
+            setTimeout(initialize, 1000);
+            return;
+        }
         createControlPanel();
         setupListeners();
-        setTimeout(startAutomationObserver, 1000);
     }
     
-    // The content script can run at different times, so we need to be robust.
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initialize);
     } else {
